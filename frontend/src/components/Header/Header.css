@@ -1,128 +1,120 @@
-:root {
-
-    --fw-reg: 300;
-    --fw-bold: 900;
-
-    --clr-light: #ffffff;
-    --clr-dark: #49557e;
-    --clr-accent: #f80707;
-    --clr-accent__-adj: #fcfc;
-
-    --fs-h1: 3rem;
-    --fs-h2: 2.25rem;
-    --fs-h3: 1.25rem;
-    --fs-body: 1rem;
-    --bs: 1.25em 1.25em 1.75em rgba(51, 71, 189, 0.25),
-          1.125em 1.125em 1.25em rgba(70, 98, 136, 0.15);
-    --ts: 1px 3px 1px rgb(88, 67, 67);
+.hero-wrap{
+    margin-top: 24px;
 }
 
-.header {
-    height: 34vw;
-    margin: 30px auto;
-    background-image: url('/header_img.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    position: relative;
-    border-radius: 5px;
-    box-shadow: 1.25em 1.25em 1.75em rgba(51, 72, 189, 0.055),
-    1.125em 1.125em 1.25em rgba(70, 97, 136, 0.027);;
-
+.hero{
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 40px;
+    align-items: center;
+    padding: clamp(24px, 5vw, 60px);
+    border-radius: 28px;
+    background: var(--brand-deep);
+    color: #fff;
 }
 
-.header-contents{
-    position: absolute;
+.hero-copy{
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: 1.5vw;
-    max-width: 50%;
-    bottom: 10%;
-    left: 6vw;
-    animation: fadeIn 300ms;/*FadeIn animation on start up*/
+    align-items: flex-start;
+    gap: 20px;
 }
 
-.header-contents h1{
-    font-weight: 500;
-    color: white;
-    font-size: max(4.5vw,22px);
+.hero h1{
+    font-size: clamp(2.1rem, 4.4vw, 3.7rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
 }
 
-.header-contents p {
-    color: white;
-    font-size: 1w;
+.hero-copy p{
+    max-width: 34ch;
+    font-size: 1.1rem;
+    color: #d6ebf7;
 }
 
-.header-contents button {
+.hero-cta{
+    padding: 14px 24px;
     border: none;
-    color: var(--clr-dark);
-    font-weight: 5000;
-    padding: 1vw 2.3vw;
-    background-color: white;
-    font-size: max(1vw, 13px);
-    border-radius: 50px;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font-weight: 700;
+    transition: background-color 150ms;
 }
 
-@media (max-width:1050px) {
-
-    .header {
-        height: 40vh;
-        margin: 30px auto;
-    }
-
-    .header-contents{
-        max-width: 55%;
-    }
-
-    .header-contents h1 {
-        font-size: 2em;
-    }
+.hero-cta:hover{
+    background: var(--surface);
 }
 
-@media (max-width:750px){
-    .header-contents{
-        max-width: 75%; 
-    }
-
-    .header-contents button{
-        padding: 2vw 4vw;
-    }
+.hero-cta:focus-visible,
+.hero-tiles button:focus-visible{
+    outline-color: #fff;
 }
 
-@media (max-width:650px){
-    .header-contents{
-        max-width: 85%; 
-    }
+.hero-tiles{
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
 }
 
-@media (max-width:550px){
-    .header {
-        margin: 30px auto;
-    }
-
-    .header-contents{
-        max-width: 90%; 
-    }
-
-    .header-contents h1{
-        font-size: 25px;
-    }
-
-    .header-contents p{
-        font-size: 15px;
-    }
+.hero-tiles button{
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    padding: 0;
+    border: none;
+    border-radius: 18px;
+    background: #eef3f7;
+    overflow: hidden;
+    text-align: left;
 }
 
-@media (max-width:380px){
-    .header {
-        margin: 10px auto;
+.hero-tiles img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 42px);
+    padding: 6px 10px 0;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    transition: transform 300ms;
+}
+
+.hero-tiles button:hover img{
+    transform: scale(1.05);
+}
+
+.hero-tiles span{
+    position: absolute;
+    left: 16px;
+    bottom: 12px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.hero-facts{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 32px;
+    padding: 16px 4px 0;
+    color: var(--muted);
+    font-size: .95rem;
+    font-weight: 500;
+}
+
+@media (max-width: 860px){
+    .hero{
+        grid-template-columns: 1fr;
+        gap: 28px;
+        border-radius: 22px;
     }
 
-    .header-contents{
-        max-width: 90%; 
-    }
-
-    .header-contents p{
-        display: none;
+    .hero-tiles button{
+        aspect-ratio: 1 / 1;
     }
 }

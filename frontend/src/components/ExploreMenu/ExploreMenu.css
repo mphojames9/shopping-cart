@@ -1,69 +1,56 @@
-.explore-menu {
+.categories{
+    position: sticky;
+    top: 68px;
+    z-index: 10;
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 12px 0;
+    background: var(--paper);
+    overflow-x: auto;
+    scrollbar-width: none;
 }
 
-.explore-menu h1{
-    color: #262626;
-    font-weight: 500;
-}
-
-.explore-menu-text{
-    max-width: 60%;
-    columns: #808080;
-}
-
-.explore-menu-list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 30px;
-    text-align: center;
-    margin: 20px 0px;
-    overflow-x: scroll;
-}
-
-.explore-menu-list::-webkit-scrollbar {
+.categories::-webkit-scrollbar{
     display: none;
 }
 
-.explore-menu-list-iteam img{
-    width: 7.5vw;
-    min-width: 80px;
-    cursor: pointer;
-    border-radius: 5%;
-    transition: 200ms;
+.chip{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+    padding: 9px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: border-color 150ms, background-color 150ms;
 }
 
-.explore-menu-list-iteam p {
-    margin-top: 10px;
-    color: #747474;
-    font-size: max(1.4vm, 16px);
-    cursor: pointer;
+.chip:hover{
+    border-color: var(--ink);
 }
 
-.explore-menu hr{
-    margin: 10px 0px;
-    height: 2px;
-    background-color: #e2e2e2;
-    border: none;
+.chip span{
+    color: var(--muted);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
 }
 
-.explore-menu-list-iteam .active{
-    border: 2px solid #f80707;
-    padding: 2px;
+.chip.active{
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
 }
 
-@media (max-width:1050px){
-    .explore-menu-text{
-        max-width: 100%;
-        font-size: 14px;
-    }
+.chip.active span{
+    color: #b8c7d4;
 }
 
-@media (max-width:380px){
-    .explore-menu h1{
-        font-size: 25px;
+@media (max-width: 760px){
+    .categories{
+        top: 60px;
     }
 }

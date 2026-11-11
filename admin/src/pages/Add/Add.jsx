@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './Add.css';
 import { assets } from '../../assets/assets';
-import axios from "axios";
+import api, { errorMessage } from '../../api';
 import { toast } from 'react-toastify';
 
-const Add = ({url}) => {
+const Add = () => {
 
-    const [image,setImage] =useState(false);
+    const [image,setImage] = useState(false);
     const [data,setData] = useState({
         name:"",
         description:"",
@@ -17,7 +17,7 @@ const Add = ({url}) => {
     const onChangeHandler = (event) => {
         const name = event.target.name;
         const value = event.target.value;
-        setData(data=>({...data,[name]:value})) 
+        setData(data=>({...data,[name]:value}))
     }
 
     const onsubmitHandler = async (event) => {
@@ -29,18 +29,22 @@ const Add = ({url}) => {
         formData.append("category",data.category)
         formData.append("image",image)
 
-        const response = await axios.post(`${url}/api/food/add`,formData);
-        if (response.data.success) {
-            setData({
-                name:"",
-                description:"",
-                price:"",
-                category:"Accessories"
-            })
-            setImage(false)
-            toast.success(response.data.message)
-        }else{
-            toast.error(response.data.message)
+        try {
+            const response = await api.post("/api/food/add",formData);
+            if (response.data.success) {
+                setData({
+                    name:"",
+                    description:"",
+                    price:"",
+                    category:"Accessories"
+                })
+                setImage(false)
+                toast.success(response.data.message)
+            }else{
+                toast.error(response.data.message)
+            }
+        } catch (error) {
+            toast.error(errorMessage(error))
         }
     }
 
@@ -52,11 +56,11 @@ const Add = ({url}) => {
                 <label htmlFor='image'>
                     <img src={image?URL.createObjectURL(image):assets.upload_area} alt="" />
                 </label>
-                <input onChange={(e)=>setImage(e.target.files[0])} type='file' id='image' hidden required />
+                <input onChange={(e)=>setImage(e.target.files[0])} type='file' id='image' accept='image/*' hidden required />
             </div>
         <div className="add-product-name flex-col">
             <p>Product name</p>
-            <input onChange={onChangeHandler} value={data.name} type='text' name='name' placeholder='Type here' />
+            <input onChange={onChangeHandler} value={data.name} type='text' name='name' placeholder='Type here' required />
             </div>
             <div className="add-product-description flex-col">
                 <p>Product description</p>
@@ -65,7 +69,7 @@ const Add = ({url}) => {
             <div className="add-category-price">
                 <div className="add-category flex-col">
                     <p>Product category</p>
-                    <select onChange={onChangeHandler} name="category">
+                    <select onChange={onChangeHandler} value={data.category} name="category">
                         <option value="Accessories">Accessories</option>
                         <option value="Phones">Phones</option>
                         <option value="Laptops">Laptops</option>
@@ -78,12 +82,12 @@ const Add = ({url}) => {
                 </div>
                  <div className="add-price flex-col">
                     <p>Product price</p>
-                    <input onChange={onChangeHandler} value={data.price} type='Number' name='price' placeholder='R200' />
+                    <input onChange={onChangeHandler} value={data.price} type='number' min='1' step='0.01' name='price' placeholder='R200' required />
                  </div>
             </div>
             <button className="add-btn" type='submit'>ADD</button>
         </form>
-      
+
     </div>
   );
 }

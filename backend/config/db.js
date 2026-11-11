@@ -1,5 +1,11 @@
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 export const connectDB = async () => {
-    await mongoose.connect('mongodb+srv://mphojames9:Beekman907.@cluster0.ygntd.mongodb.net/oneStop').then(()=>console.log("DB connected"));
+    const uri = process.env.MONGO_URI;
+    if (!uri) {
+        console.error("MONGO_URI is missing. Copy .env.example to .env and fill it in.");
+        process.exit(1);
+    }
+    await mongoose.connect(uri);
+    console.log("DB connected");
 }

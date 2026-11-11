@@ -1,17 +1,88 @@
-.food-display{
-    margin-top: 30px;
+.shop{
+    margin-top: 16px;
 }
 
-.food-display h2{
-    font-size: max(2vw, 24px);
-    font-weight: 600;
+.shop-head{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
 }
 
-.food-display-list{
+.shop-head h2{
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+}
+
+.shop-head p{
+    margin-top: 4px;
+    color: var(--muted);
+}
+
+.search{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: min(320px, 100%);
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--muted);
+}
+
+.search:focus-within{
+    border-color: var(--brand-deep);
+    outline: 2px solid var(--brand-deep);
+    outline-offset: 1px;
+    color: var(--ink);
+}
+
+.search input{
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.shop-grid{
+    list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
-    margin-top: 30px;
-    gap: 30px;
-    row-gap: 50px;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 36px 24px;
+}
 
+.product-skeleton{
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg, var(--surface) 0%, #f8fafb 50%, var(--surface) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+}
+
+.shop-empty{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 64px 16px;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    color: var(--muted);
+    text-align: center;
+}
+
+@media (max-width: 640px){
+    .shop-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 14px;
+    }
+
+    .search{
+        width: 100%;
+    }
 }

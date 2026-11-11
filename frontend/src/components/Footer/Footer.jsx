@@ -1,44 +1,34 @@
 import React from 'react';
 import './Footer.css';
+import { Link } from 'react-router-dom';
 import { assets } from '../../assets/assets';
 
 const Footer = () => {
   return (
-    <div className='footer' id='footer'>
-        <div className="footer-content">
-            <div className="footer-content-left">
-                <img className='footer-logo' src={assets.logo} alt='' />
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                </p>
-                <div className="footer-social-icons">
-                    <img src={assets.facebook_icon} alt='' />
-                    <img src={assets.twitter_icon} alt='' />
-                    <img src={assets.linkedin_icon} alt='' />
-                </div>
+    <footer className='footer' id='footer'>
+        <div className="footer-inner">
+            <div className="footer-brand">
+                <img src={assets.logo} alt='One Stop' />
+                <p>Phones, laptops, TVs, monitors and gaming gear in one place.</p>
             </div>
-            <div className="footer-content-center">
-                <h2>One Stop</h2>
+            <div>
+                <h2>Shop</h2>
                 <ul>
-                    <li>Home</li>
-                    <li>About us</li>
-                    <li>Delivery</li>
-                    <li>Privacy policy</li>
+                    <li><Link to='/shopping-cart'>Home</Link></li>
+                    <li><Link to='/shopping-cart/cart'>Cart</Link></li>
+                    <li><Link to='/shopping-cart/myorders'>My orders</Link></li>
                 </ul>
             </div>
-            <div className="footer-content-right">
-                <h2>CONTACT US</h2>
+            <div>
+                <h2>Contact us</h2>
                 <ul>
-                    <li>+2711 233 1245</li>
-                    <li>demo@onestop.com</li>
+                    <li><a href='tel:+27112331245'>+27 11 233 1245</a></li>
+                    <li><a href='mailto:demo@onestop.com'>demo@onestop.com</a></li>
                 </ul>
             </div>
         </div>
-        <hr />
-        <p className="footer-copyright">Copyright 2024 demoonestop.com - All Right  Reserved</p>
-      
-    </div>
+        <p className="footer-copy">&copy; {new Date().getFullYear()} One Stop. All rights reserved.</p>
+    </footer>
   );
 }
 

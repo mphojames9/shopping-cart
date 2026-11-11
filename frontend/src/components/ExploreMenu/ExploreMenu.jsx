@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './ExploreMenu.css';
 import { menu_list } from '../../assets/assets';
+import { StoreContext } from '../../context/StoreContext';
+import { categoryLabel } from '../../utils/format';
 
 const ExploreMenu = ({category, setCategory}) => {
+
+    const {food_list,ready} = useContext(StoreContext);
+    const countIn = (name) => food_list.filter((item)=>item.category===name).length;
+
     return (
-        <div className='explore-menu' id='explore-menu'>
-            <h1>Explore menu Iteams here</h1>
-            <p className='explore-menu-text'>Choose from clothing, phone laptops and viarity of almomost every you need need</p>
-            <div className="explore-menu-list">
-                {menu_list.map((item, index) => {
-                    return (
-                        <div onClick={()=>setCategory(prev=>prev===item.menu_name?"All":item.menu_name)} key={index} className='explore-menu-list-iteam'>
-                            <img className={category===item.menu_name?"active":""} src={item.menu_image} alt='menuImage'></img>
-                            <p>{item.menu_name}</p>
-                        </div>
-                    )
-                })}
-            </div>
-            <hr/>
-        </div>
+        <nav className='categories' id='explore-menu' aria-label="Product categories">
+            <button type="button" className={`chip${category==='All'?' active':''}`} aria-pressed={category==='All'} onClick={()=>setCategory('All')}>
+                All {ready && <span>{food_list.length}</span>}
+            </button>
+            {menu_list.map((item)=>(
+                <button
+                    type="button"
+                    key={item.menu_name}
+                    className={`chip${category===item.menu_name?' active':''}`}
+                    aria-pressed={category===item.menu_name}
+                    onClick={()=>setCategory((prev)=>prev===item.menu_name?'All':item.menu_name)}
+                >
+                    {categoryLabel(item.menu_name)} {ready && <span>{countIn(item.menu_name)}</span>}
+                </button>
+            ))}
+        </nav>
     );
 }
 

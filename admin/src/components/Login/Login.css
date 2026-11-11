@@ -1,0 +1,84 @@
+.login{
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background-color: #fcfcfc;
+}
+
+.login-box{
+    width: max(24vw, 300px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 30px;
+    border: 1px solid #a9a9a9;
+    border-radius: 8px;
+    color: #6d6d6d;
+    animation: 300ms fadeIn;
+}
+
+.login-logo{
+    width: 90px;
+    align-self: center;
+}
+
+.login-box h2{
+    text-align: center;
+    color: #181818;
+}
+
+.login-box input{
+    padding: 10px;
+    border: 1px solid #c5c5c5;
+    border-radius: 4px;
+}
+
+.login-box button{
+    padding: 10px;
+    border: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.login-box button:disabled{
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.login-box input:focus-visible{
+    outline: 2px solid #181818;
+    outline-offset: 1px;
+}
+
+.login-hint{
+    font-size: 13px;
+    margin-top: -6px;
+}
+
+.login-show{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.login-show input{
+    padding: 0;
+    accent-color: #181818;
+}
+
+.login-switch{
+    text-align: center;
+    font-size: 14px;
+}
+
+/* text-style button, overrides the filled .login-box button */
+.login-box .login-switch button{
+    padding: 0;
+    background: none;
+    color: #181818;
+    font-weight: 600;
+    text-decoration: underline;
+}

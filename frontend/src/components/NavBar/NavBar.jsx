@@ -1,50 +1,89 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import './NavBar.css';
 import { assets } from '../../assets/assets';
-import { Link, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
+import { CartIcon, ChevronIcon, SearchIcon } from '../Icons';
+
+const HOME = '/shopping-cart';
 
 const NavBar = ({setShowLogin}) => {
 
-    const [menu,setMenu] = useState("home");
-    const {getTotalCartAmount,token,setToken} = useContext(StoreContext);
+  const {cartItems,token,logout} = useContext(StoreContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const accountRef = useRef(null);
 
-    const navigate = useNavigate();
+  const cartCount = Object.values(cartItems).reduce((sum,qty)=>sum+qty,0);
+  const onHome = location.pathname.replace(/\/$/,'') === HOME;
 
-    const logout = () =>{
-      localStorage.removeItem("token");
-      setToken("");
-      navigate("/shopping-cart/")
+  // scroll to a section of the home page (going there first when we are on another page)
+  const goTo = (sectionId,focusId) => (event) => {
+    event.preventDefault();
+    if (onHome) {
+      document.getElementById(sectionId)?.scrollIntoView({behavior:'smooth'});
+      if (focusId) document.getElementById(focusId)?.focus({preventScroll:true});
+    } else {
+      navigate(HOME,{state:{scrollTo:sectionId,focus:focusId}});
     }
+  }
 
+  const scrollToFooter = (event) => {
+    event.preventDefault();
+    document.getElementById('footer')?.scrollIntoView({behavior:'smooth'});
+  }
+
+  const closeAccount = () => {
+    if (accountRef.current) accountRef.current.open = false;
+  }
+
+  const handleLogout = () => {
+    closeAccount();
+    logout();
+    navigate(HOME);
+  }
+
+  // close the account menu when clicking elsewhere
+  useEffect(()=>{
+    const close = (event) => {
+      const menu = accountRef.current;
+      if (menu?.open && !menu.contains(event.target)) menu.open = false;
+    };
+    document.addEventListener('pointerdown',close);
+    return ()=>document.removeEventListener('pointerdown',close);
+  },[]);
 
   return (
-    <div className='navbar'>
-      <Link to='/shopping-cart/'><img src={assets.logo} alt="logo" className="logo" /></Link>
-      <ul className="navbar-menu">
-        <a href='#' onClick={()=>setMenu('home')} className={menu === 'home'?'active':''}>home</a>
-        <a href='#explore-menu' onClick={()=>setMenu('menu')} className={menu === 'menu'?'active':''}>menu</a>
-        <a href='#app-download' onClick={()=>setMenu('mobile-app')} className={menu === 'mobile-app'?'active':''}>mobile-app</a>
-        <a href='#footer' onClick={()=>setMenu('contact-us')} className={menu === 'contact-us'?'active':''}>contact us</a>
-      </ul>
-      <div className="navbar-right">
-        <img src={assets.search_icon} alt="search icon" />
-        <div className="navbar-search-icon">
-            <Link to='./shopping-cart/cart'><img src={assets.basket_icon} alt="basket icon" /></Link>
-            <div className={getTotalCartAmount()===0?"":"dot"}></div>
+    <header className='navbar'>
+      <div className="navbar-inner">
+        <Link to={HOME} className="navbar-brand"><img src={assets.logo} alt="One Stop home" /></Link>
+
+        <nav className="navbar-links" aria-label="Main">
+          <Link to={HOME}>Home</Link>
+          <a href="#food-display" onClick={goTo('food-display')}>Shop</a>
+          <a href="#footer" onClick={scrollToFooter}>Contact</a>
+        </nav>
+
+        <div className="navbar-actions">
+          <a href="#product-search" className="icon-btn" aria-label="Search products" onClick={goTo('food-display','product-search')}>
+            <SearchIcon />
+          </a>
+          <Link to='/shopping-cart/cart' className="icon-btn" aria-label={`Cart, ${cartCount} ${cartCount===1?'item':'items'}`}>
+            <CartIcon />
+            {cartCount>0 && <span className="cart-badge">{cartCount}</span>}
+          </Link>
+          {token
+            ? <details className="account" ref={accountRef}>
+                <summary>Account <ChevronIcon /></summary>
+                <div className="account-menu">
+                  <Link to='/shopping-cart/myorders' onClick={closeAccount}>My orders</Link>
+                  <button type="button" onClick={handleLogout}>Sign out</button>
+                </div>
+              </details>
+            : <button type="button" className="btn btn-primary btn-sm" onClick={()=>setShowLogin(true)}>Sign in</button>}
         </div>
-        {!token?<button onClick={()=>setShowLogin(true)}>sign in</button>
-        :<div className='navbar-profile'>
-        <img src={assets.profile_icon} alt='' />
-          <ul className='nav-profile-dropdown'>
-            <li><img src={assets.bag_icon} alt='' /><p>Ofrders</p></li>
-            <hr />
-            <li onClick={logout}><img src={assets.logout_icon} alt='' /><p>Logout</p></li>
-          </ul>
-        </div>}
       </div>
-    </div>
+    </header>
   );
 }
 

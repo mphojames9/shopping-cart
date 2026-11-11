@@ -1,36 +1,35 @@
 import React, { useContext } from 'react';
 import './FoodItem.css';
-import { assets } from '../../assets/assets';
 import { StoreContext } from '../../context/StoreContext';
+import { formatPrice } from '../../utils/format';
 
 const FoodItem = ({id,name,price,description,image}) => {
 
     const {cartItems,addToCart,removeFromCart,url} = useContext(StoreContext);
+    const qty = cartItems[id] || 0;
 
   return (
-    <div className='food-item'>
-        <div className="food-item-img-container">
-            <img className='food-item-image' src={url+"/images/"+image} alt="" />
-        {!cartItems[id]
-            ?<img className='add' onClick={()=>addToCart(id)} src={assets.add_icon_white} alt=""/>
-            :<div className='food-item-counter'>
-                <img onClick={()=>removeFromCart(id)} src={assets.remove_icon_red} alt=""/>
-                <p>{cartItems[id]}</p>
-                <img onClick={()=>addToCart(id)} src={assets.add_icon_green} alt=""/>
+    <article className='product'>
+        <div className="product-media">
+            <img src={url+"/images/"+image} alt={name} loading="lazy" />
+        </div>
+        <div className="product-info">
+            <h3>{name}</h3>
+            <p className="product-desc">{description}</p>
+            <div className="product-buy">
+                <strong className="product-price">{formatPrice(price)}</strong>
+                {qty===0
+                    ? <button type="button" className="btn btn-primary btn-sm" onClick={()=>addToCart(id)}>Add to cart</button>
+                    : <div className="stepper">
+                        <button type="button" aria-label={`Remove one ${name}`} onClick={()=>removeFromCart(id)}>&minus;</button>
+                        <span aria-live="polite">{qty}</span>
+                        <button type="button" aria-label={`Add one more ${name}`} onClick={()=>addToCart(id)}>+</button>
+                      </div>
+                }
             </div>
-        }
         </div>
-        <div className="food-item-info">
-            <div className="food-item-name-rating">
-            <p>{name}</p>
-            <img src={assets.rating_starts} alt="" />
-        </div>
-    <p className="food-item-desc">{description}</p>
-    <p className="food-item-price">R {price}</p>
-    </div>
-    </div>
+    </article>
   );
 }
 
 export default FoodItem;
- 

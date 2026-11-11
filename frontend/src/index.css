@@ -1,11 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+:root{
+    --ink: #0b1b2b;
+    --muted: #5b6b7a;
+    --line: #dfe5ea;
+    --surface: #eef1f4;
+    --paper: #ffffff;
+    --brand: #2aa1d9;       /* the blue in the One Stop logo */
+    --brand-deep: #0a5f8f;  /* hero, focus rings, badges */
+    --danger: #b3261e;
+    --radius: 14px;
+    --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
 
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: outfit;
+}
+
+html{
     scroll-behavior: smooth;
+    scroll-padding-top: 130px;
+}
+
+body{
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3{
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
 }
 
 a{
@@ -13,23 +42,165 @@ a{
     color: inherit;
 }
 
+img{
+    display: block;
+    max-width: 100%;
+}
+
+button, input, select, textarea{
+    font: inherit;
+    color: inherit;
+}
+
+button{
+    cursor: pointer;
+}
+
+:focus-visible{
+    outline: 2px solid var(--brand-deep);
+    outline-offset: 2px;
+}
+
+#root{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .app{
-    width: 90%;
-    margin: auto;
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding-bottom: 96px;
+    flex: 1;
 }
 
-@media (max-width:550px){
-    .app {
-        width: 95%;
-    }
+/* ---------- shared controls ---------- */
+.btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    transition: background-color 150ms, border-color 150ms;
 }
 
-/*Fadein animation on start up*/
+.btn-primary{
+    background: var(--ink);
+    color: #fff;
+}
+
+.btn-primary:hover{
+    background: #17344f;
+}
+
+.btn-ghost{
+    background: transparent;
+    border-color: var(--line);
+}
+
+.btn-ghost:hover{
+    border-color: var(--ink);
+}
+
+.btn-sm{
+    padding: 9px 16px;
+    font-size: .95rem;
+}
+
+.btn-block{
+    width: 100%;
+}
+
+.btn:disabled{
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.link-btn{
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+    color: var(--brand-deep);
+    text-decoration: underline;
+}
+
+.stepper{
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    justify-self: start;
+}
+
+.stepper button{
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.stepper button:hover{
+    background: var(--surface);
+}
+
+.stepper span{
+    min-width: 28px;
+    text-align: center;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.field{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.field span{
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.field input{
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    width: 100%;
+}
+
+.field input:focus{
+    outline: 2px solid var(--brand-deep);
+    outline-offset: 1px;
+    border-color: var(--brand-deep);
+}
+
 @keyframes fadeIn{
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 100%;
+    from{ opacity: 0; transform: translateY(8px); }
+    to{ opacity: 1; transform: none; }
+}
+
+@keyframes shimmer{
+    to{ background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{
+        animation: none !important;
+        transition: none !important;
     }
 }

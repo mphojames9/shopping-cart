@@ -1,189 +1,142 @@
-/*custom properties*/
-:root {
-
-    --fw-reg: 300;
-    --fw-bold: 900;
-
-    --clr-light: #ffffff;
-    --clr-dark: #49557e;
-    --clr-accent: #f80707;
-    --clr-accent__-adj: #fcfc;
-
-    --fs-h1: 3rem;
-    --fs-h2: 2.25rem;
-    --fs-h3: 1.25rem;
-    --fs-body: 1rem;
-    --bs: 1.25em 1.25em 1.75em rgba(51, 71, 189, 0.25),
-          1.125em 1.125em 1.25em rgba(70, 98, 136, 0.15);
-    --ts: 1px 3px 1px rgb(88, 67, 67);
-}
 .navbar{
-    padding: 20px 0px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+}
+
+.navbar-inner{
+    width: min(1200px, 92%);
+    height: 68px;
+    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 32px;
 }
 
-.navbar .logo {
-    width: 150px;
+.navbar-brand img{
+    height: 32px;
+    width: auto;
 }
 
-.navbar-menu{
-    display:flex;
+.navbar-links{
+    display: flex;
+    gap: 28px;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.navbar-links a:hover{
+    color: var(--ink);
+}
+
+.navbar-actions{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn{
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+}
+
+.icon-btn:hover{
+    background: var(--surface);
+}
+
+.icon-btn svg{
+    width: 22px;
+    height: 22px;
+}
+
+.cart-badge{
+    position: absolute;
+    top: 1px;
+    right: -1px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--brand-deep);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.account{
+    position: relative;
+}
+
+.account summary{
     list-style: none;
-    gap: 20px;
-    color:var(--clr-dark);
-    font-size: 18px;
-}
-
-.navbar-right{
     display: flex;
     align-items: center;
-    gap: 40px;
-}
-
-.navbar button{
-    background: transparent;
-    font-size: 16px;
-    color: var(--clr-accent);
-    border: 1px solid var(--clr-accent);
-    padding: 10px 30px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: ease-in-out 300ms;
-}
-
-.navbar button:hover{
-    transform: scale(1.02);
-}
-
-.navbar button:active {
-    transform: scale(0.98);
-}
-
-.navbar .active {
-    padding-bottom: 2px;
-    border-bottom: 2px solid var(--clr-accent                          );
-}
-
-.navbar li{
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-weight: 600;
     cursor: pointer;
 }
 
-.navbar-search-icon{
-    position: relative;
-}
-
-.navbar-search-icon .dot{
-    position: absolute;
-    min-width: 10px;
-    min-height: 10px;
-    background-color: var(--clr-accent);
-    top: -8px;
-    right: -8px;
-    border-radius: 50%;
-}
-
-.navbar-profile{
-    position: relative;
-}
-
-.nav-profile-dropdown{
-    position: absolute;
+.account summary::-webkit-details-marker{
     display: none;
-    right: 0;
-    z-index: 1;
 }
 
-.navbar-profile:hover .nav-profile-dropdown{
+.account summary:hover{
+    border-color: var(--ink);
+}
+
+.account-menu{
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    min-width: 170px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    background-color: #fff2ef;
-    padding: 12px 25px;
-    border-radius: 4px;
-    border: 1px solid tomato;
-    outline: 2px solid white;
-    list-style: none;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(11, 27, 43, .12);
 }
 
-.nav-profile-dropdown li{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
+.account-menu a,
+.account-menu button{
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    text-align: left;
+    font-weight: 500;
 }
 
-.nav-profile-dropdown img{
-    width: 20px;
+.account-menu a:hover,
+.account-menu button:hover{
+    background: var(--surface);
 }
 
-.nav-profile-dropdown li:hover{
-    color: tomato;
-}
-
-@media (max-width:1050px){
-    .navbar .logo{
-        width: 140px;
+@media (max-width: 760px){
+    .navbar-inner{
+        height: 60px;
+        gap: 12px;
     }
 
-    .navbar-menu{
-        gap: 20px;
-        font-size: 17px;
-    }
-
-    .navbar-right{
-        gap: 30px;
-    }
-
-    .navbar-right img{
-        width: 22px;
-    }
-
-    .navbar-right button{
-        padding: 8px 25px;
-    }
-}
-
-@media (max-width:900px){
-    .navbar .logo{
-        width: 120px;
-    }
-
-    .navbar-menu{
-        gap: 15px;
-        font-size: 16px;
-    }
-
-    .navbar-right{
-        gap: 20px;
-    }
-
-    .navbar-right img{
-        width: 20px;
-    }
-
-    .navbar-right button{
-        padding: 7px 20px;
-        font-size: 15px;
-    }
-}
-
-@media (max-width:1050px){
-    
-    .navbar-menu{
+    .navbar-links{
         display: none;
     }
-        
-}
 
-@media (max-width:380px){
-    .navbar-right button{
-        padding: 3px 16px;
-        font-size: 11px;
-    }
-
-    .navbar-right img{
-        width: 16px;
+    .navbar-brand img{
+        height: 28px;
     }
 }

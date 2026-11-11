@@ -16,3 +16,22 @@
     padding: 2px;
     
 }
+.navbar-right{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logout-btn{
+    padding: 8px 20px;
+    border: 1px solid #181818;
+    border-radius: 50px;
+    background: transparent;
+    cursor: pointer;
+    transition: 300ms ease-in-out;
+}
+
+.logout-btn:hover{
+    background-color: #181818;
+    color: white;
+}

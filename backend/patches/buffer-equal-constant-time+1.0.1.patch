@@ -1,0 +1,13 @@
+diff --git a/node_modules/buffer-equal-constant-time/index.js b/node_modules/buffer-equal-constant-time/index.js
+index 5462c1f..4d25dd6 100644
+--- a/node_modules/buffer-equal-constant-time/index.js
++++ b/node_modules/buffer-equal-constant-time/index.js
+@@ -34,7 +34,7 @@ bufferEq.install = function() {
+ };
+ 
+ var origBufEqual = Buffer.prototype.equal;
+-var origSlowBufEqual = SlowBuffer.prototype.equal;
++var origSlowBufEqual = (typeof SlowBuffer !== 'undefined' ? SlowBuffer.prototype.equal : undefined) || Buffer.prototype.equal;
+ bufferEq.restore = function() {
+   Buffer.prototype.equal = origBufEqual;
+   SlowBuffer.prototype.equal = origSlowBufEqual;
