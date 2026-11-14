@@ -1,52 +1,130 @@
-.list-table-format {
+.list-search{
+    max-width: 440px;
+    margin-bottom: 16px;
+}
+
+.list-card{
+    overflow: hidden;
+}
+
+/* desktop: table-like rows */
+.list-row{
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
+    grid-template-columns: 64px minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) 44px;
     align-items: center;
-    gap: 10px;
-    padding: 12px 15px;
-    border: 1px solid #cacaca;
+    gap: 16px;
+    max-height: 160px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    transition: background-color .2s;
+}
+.list-row:last-child{ border-bottom: 0; }
+
+@media (hover:hover){
+    .list-row:not(.list-head):hover{ background: #F8FAFD; }
 }
 
-.list-table-format.title {
-    background-color: #f9f9f9;
+.list-head{
+    padding-top: 14px;
+    padding-bottom: 14px;
+    background: #F8FAFD;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--ink-3);
 }
 
-.list-table-format img{
-    width: 50px;
+.thumb{
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--ink-3);
+}
+.thumb img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.cursor{
-    cursor: pointer;
-    border-radius: 50px;
-    padding: 3px;
-    border: 1px solid rgb(64, 64, 173);
-    text-align: center;
-    transition: 300ms ease-in-out;
+.list-name{
+    font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
-.cursor:hover{
-    border: 1px solid rgb(184, 69, 69);
+/* chip + price are separate cells on desktop, one stacked block on mobile */
+.list-meta{ display: contents; }
+.list-meta .chip{ justify-self: start; }
+
+.list-price{
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
 }
 
-@media (max-width:600px){
-    .list-table-format{
-        grid-template-columns: 1fr 3fr 1fr;
-        gap: 15px;
+/* row leaves with a slide + collapse after a successful delete */
+.list-row.is-leaving{
+    overflow: hidden;
+    animation: rowLeave .32s var(--ease-out) forwards;
+}
+@keyframes rowLeave{
+    from{ opacity: 1; max-height: 160px; }
+    to{
+        opacity: 0;
+        transform: translateX(28px);
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-bottom-width: 0;
+    }
+}
+
+/* skeleton shapes */
+.skel-thumb{ width: 64px; height: 64px; border-radius: var(--r-md); }
+.skel-line{ height: 14px; width: 80%; }
+.skel-line.short{ width: 50%; }
+.skel-chip{ height: 24px; width: 90px; border-radius: 999px; }
+
+/* ---------- mobile: each row becomes a compact product card ---------- */
+@media (max-width: 720px){
+    .list-head{ display: none; }
+
+    .list-row{
+        grid-template-columns: 72px minmax(0, 1fr) 44px;
+        grid-template-areas:
+            "thumb name act"
+            "thumb meta act";
+        gap: 4px 14px;
+        padding: 14px 12px 14px 14px;
+    }
+    .list-row > .thumb,
+    .list-row > .skel-thumb{ grid-area: thumb; width: 72px; height: 72px; align-self: center; }
+    .list-row > .list-name{ grid-area: name; align-self: end; }
+    .list-row > .icon-btn{ grid-area: act; align-self: center; }
+
+    .list-meta{
+        grid-area: meta;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px 10px;
+        align-self: start;
     }
 
-    .list-table-format.title{
-        display: none;
-    }
-
-    .cursor{
-        cursor: pointer;
-        width: 25px;
-        border-radius: 50px;
-        padding: 1px;
-        border: 1px solid rgb(64, 64, 173);
-        text-align: center;
-        transition: 300ms ease-in-out;
-    }
+    /* skeleton rows reuse the same grid */
+    .list-row > .skel-line:not(.short){ grid-area: name; }
+    .list-row > .skel-chip{ grid-area: meta; }
+    .list-row > .skel-line.short{ display: none; }
 }
 
+@media (max-width: 720px){
+    .list-search{ max-width: none; }
+}
 
+@media (max-width: 860px){
+    .page-head .btn{ display: none; }
+}

@@ -1,53 +1,247 @@
-.add{
-    width: 70%;
-    margin-left: max(5vw, 25px);
-    margin-top: 50px;
-    color: #6d6d6d;
-    font-size: 16px;
-    animation: 300ms fadeIn;
+.add-layout{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 24px;
+    align-items: start;
+    max-width: 1020px;
 }
 
-.add form{
-    gap: 20px;
+.add-form{
+    display: grid;
+    gap: 32px;
+    padding: clamp(18px, 3vw, 32px);
 }
 
-.add-img-upload img{
-    width: 100px;
-    cursor:pointer;
+.add-section{
+    display: grid;
+    gap: 16px;
+}
+.add-section h2{
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
 }
 
-.add-product-name, .add-product-description{
-    width: max(40%,280px);
+.field-block{
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+}
+.field-block > label{
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--ink-2);
 }
 
-.add-product-name input, .add-product-description textarea{
-    padding: 10px;
+.add-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
-.add-category-price{
-    display: flex;
-    gap: 30px;
+.select-wrap{ position: relative; }
+.select-wrap > svg{
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-3);
+    pointer-events: none;
 }
 
-.add-category-price select, .add-category-price input{
-    max-width: 120px;
-    padding: 10px;
+.price-prefix{
+    font-weight: 700;
+    color: var(--ink-2);
+}
+
+/* ---------- image drop zone ---------- */
+.dropzone{
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 232px;
+    overflow: hidden;
+    border: 2px dashed var(--line-strong);
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    cursor: pointer;
+    transition: border-color .25s, background-color .25s, transform .35s var(--ease-spring);
+}
+@media (hover:hover){
+    .dropzone:hover{ border-color: var(--brand-500); background: var(--brand-50); }
+}
+.dropzone:focus-within{
+    border-color: var(--brand-500);
+    box-shadow: 0 0 0 4px rgba(30,155,215,.16);
+}
+.dropzone.is-dragging{
+    border-color: var(--brand-500);
+    background: var(--brand-50);
+    transform: scale(1.015);
+}
+.dropzone.has-image{
+    border-style: solid;
+    border-color: var(--line);
+}
+
+/* real file input covers the zone: click, tap and native drop all work */
+.dropzone-input{
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    font-size: 0;
+}
+
+.dropzone-empty{
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    padding: 0 20px;
+    text-align: center;
+    color: var(--ink-2);
+    font-size: .9rem;
+}
+.dropzone-empty strong{
+    color: var(--ink);
+    font-size: 1rem;
+}
+.dropzone-icon{
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 8px;
+    border-radius: 20px;
+    background: var(--surface);
+    color: var(--brand-600);
+    box-shadow: var(--shadow-md);
+    transition: transform .4s var(--ease-spring);
+}
+@media (hover:hover){
+    .dropzone:hover .dropzone-icon{ transform: translateY(-4px) rotate(-4deg); }
+}
+
+.dropzone img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: imgIn .5s var(--ease-out) both;
+}
+@keyframes imgIn{
+    from{ opacity: 0; transform: scale(1.06); }
+    to{ opacity: 1; transform: none; }
+}
+
+.dropzone-change{
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: rgba(15,28,46,.72);
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.dropzone-clear{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.94);
+    color: var(--ink);
+    box-shadow: var(--shadow-md);
+    transition: transform .2s var(--ease-out), color .2s;
+}
+.dropzone-clear:active{ transform: scale(.88); }
+@media (hover:hover){
+    .dropzone-clear:hover{ color: var(--danger); }
 }
 
 .add-btn{
-    max-width: 120px;
-    border: none;
-    padding: 10px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    transition: 300ms ease-in-out;
+    justify-self: start;
+    min-width: 200px;
+    min-height: 54px;
 }
 
-.add-btn:hover{
-    opacity:.9;
+/* ---------- live preview ---------- */
+.add-preview{
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    display: grid;
+    gap: 10px;
+}
+.preview-title{
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--ink-2);
+}
+.preview-card{
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+.preview-media{
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    background: var(--bg);
+    color: var(--ink-3);
+}
+.preview-media img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.preview-body{
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 16px 18px 20px;
+}
+.preview-body h3{
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    overflow-wrap: anywhere;
+}
+.preview-body p{
+    color: var(--ink-2);
+    font-size: .9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+.preview-body .is-placeholder{ color: var(--ink-3); }
+.preview-body strong{
+    margin-top: 4px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
 }
 
-.add-btn:active{
-    transform: scale(.9)
+/* ---------- tablet + mobile ---------- */
+@media (max-width: 1100px){
+    .add-layout{ grid-template-columns: minmax(0, 1fr); }
+    .add-preview{ display: none; }
+}
+
+@media (max-width: 560px){
+    .add-row{ grid-template-columns: 1fr; }
+    .dropzone{ height: 200px; }
+    .add-btn{ justify-self: stretch; }
 }

@@ -3,8 +3,29 @@ import './Login.css';
 import { assets } from '../../assets/assets';
 import api, { errorMessage } from '../../api';
 import { toast } from 'react-toastify';
+import {
+  EyeIcon, EyeOffIcon, MailIcon, LockIcon, UserIcon, KeyIcon,
+  SmartphoneIcon, LaptopIcon, MonitorIcon, HeadphonesIcon
+} from '../Icons';
 
 const emptyForm = { name:"", email:"", password:"", confirmPassword:"", inviteCode:"" };
+
+// Floating-label input with a leading icon
+const Field = ({ icon:Icon, label, action, ...input }) => (
+  <div className='field'>
+    <Icon size={18} className='field-icon' />
+    <input id={input.name} placeholder=' ' {...input} />
+    <label htmlFor={input.name}>{label}</label>
+    {action}
+  </div>
+);
+
+// Height-animated wrapper for fields that only exist while registering
+const Reveal = ({ children }) => (
+  <div className='reveal'>
+    <div className='reveal-inner'>{children}</div>
+  </div>
+);
 
 const Login = ({setToken}) => {
 
@@ -16,6 +37,7 @@ const Login = ({setToken}) => {
   const isRegister = mode === "register";
 
   const switchMode = (next) => {
+    if (next === mode) return;
     setMode(next);
     setData(emptyForm);
     setShowPassword(false);
@@ -63,42 +85,96 @@ const Login = ({setToken}) => {
 
   const passwordType = showPassword ? "text" : "password";
 
+  const passwordToggle = (
+    <button
+      type='button'
+      className='field-action'
+      onClick={()=>setShowPassword(v=>!v)}
+      aria-label={showPassword ? "Hide password" : "Show password"}
+      aria-pressed={showPassword}
+    >
+      {showPassword ? <EyeOffIcon size={20}/> : <EyeIcon size={20}/>}
+    </button>
+  );
+
   return (
-    <div className='login'>
-      <form className='login-box' onSubmit={onSubmitHandler}>
-        <img src={assets.logo} alt="" className='login-logo' />
-        <h2>{isRegister ? "Create admin account" : "Admin sign in"}</h2>
+    <div className='auth'>
 
-        {isRegister &&
-          <input name='name' type='text' placeholder='Your name' autoComplete='name' value={data.name} onChange={onChangeHandler} required />
-        }
-        <input name='email' type='email' placeholder='Email' autoComplete='email' value={data.email} onChange={onChangeHandler} required />
-        <input name='password' type={passwordType} placeholder='Password' autoComplete={isRegister ? "new-password" : "current-password"} minLength={isRegister ? 8 : undefined} value={data.password} onChange={onChangeHandler} required />
-        {isRegister &&
-          <>
-            <input name='confirmPassword' type={passwordType} placeholder='Confirm password' autoComplete='new-password' value={data.confirmPassword} onChange={onChangeHandler} required />
-            <input name='inviteCode' type='password' placeholder='Admin invite code' autoComplete='off' value={data.inviteCode} onChange={onChangeHandler} required />
-            <p className='login-hint'>Use at least 8 characters. Ask the site owner for the invite code.</p>
-          </>
-        }
+      <aside className='auth-brand'>
+        <div className='auth-glow' aria-hidden='true'>
+          <span className='orb o1'/><span className='orb o2'/><span className='orb o3'/>
+        </div>
 
-        <label className='login-show'>
-          <input type='checkbox' checked={showPassword} onChange={(e)=>setShowPassword(e.target.checked)} />
-          Show password
-        </label>
+        <img src={assets.logo} alt='One stop' className='auth-logo' />
 
-        <button type='submit' disabled={loading}>
-          {loading
-            ? (isRegister ? "Creating account..." : "Signing in...")
-            : (isRegister ? "Create account" : "Sign in")}
-        </button>
+        <div className='auth-copy'>
+          <h1>Run your store from anywhere.</h1>
+          <p>Add products, track orders and keep deliveries moving, from your phone or your desk.</p>
+        </div>
 
-        <p className='login-switch'>
-          {isRegister
-            ? <>Already have an account? <button type='button' onClick={()=>switchMode("login")}>Sign in</button></>
-            : <>Need an admin account? <button type='button' onClick={()=>switchMode("register")}>Create one</button></>}
-        </p>
-      </form>
+        <div className='auth-tiles' aria-hidden='true'>
+          <span className='tile t1'><SmartphoneIcon size={30}/></span>
+          <span className='tile t2'><LaptopIcon size={38}/></span>
+          <span className='tile t3'><HeadphonesIcon size={28}/></span>
+          <span className='tile t4'><MonitorIcon size={32}/></span>
+        </div>
+      </aside>
+
+      <main className='auth-panel'>
+        <form className='auth-card' onSubmit={onSubmitHandler}>
+
+          <div className='auth-head' key={mode}>
+            <h2>{isRegister ? "Create admin account" : "Admin sign in"}</h2>
+            <p>{isRegister ? "You will need the invite code from the site owner." : "Sign in to manage products and orders."}</p>
+          </div>
+
+          <div className='seg' role='tablist' aria-label='Sign in or create account' style={{'--i': isRegister ? 1 : 0}}>
+            <span className='seg-thumb' aria-hidden='true'/>
+            <button type='button' role='tab' aria-selected={!isRegister} onClick={()=>switchMode("login")}>Sign in</button>
+            <button type='button' role='tab' aria-selected={isRegister} onClick={()=>switchMode("register")}>Create account</button>
+          </div>
+
+          <div className='auth-fields'>
+            {isRegister &&
+              <Reveal>
+                <Field icon={UserIcon} label='Your name' name='name' type='text' autoComplete='name' value={data.name} onChange={onChangeHandler} required />
+              </Reveal>
+            }
+
+            <Field icon={MailIcon} label='Email' name='email' type='email' autoComplete='email' value={data.email} onChange={onChangeHandler} required />
+
+            <Field
+              icon={LockIcon}
+              label='Password'
+              name='password'
+              type={passwordType}
+              autoComplete={isRegister ? "new-password" : "current-password"}
+              minLength={isRegister ? 8 : undefined}
+              value={data.password}
+              onChange={onChangeHandler}
+              action={passwordToggle}
+              required
+            />
+
+            {isRegister &&
+              <Reveal>
+                <Field icon={LockIcon} label='Confirm password' name='confirmPassword' type={passwordType} autoComplete='new-password' value={data.confirmPassword} onChange={onChangeHandler} required />
+                <Field icon={KeyIcon} label='Admin invite code' name='inviteCode' type='password' autoComplete='off' value={data.inviteCode} onChange={onChangeHandler} required />
+                <p className='auth-hint'>Use at least 8 characters for your password.</p>
+              </Reveal>
+            }
+          </div>
+
+          <button type='submit' className='btn btn-primary auth-submit' disabled={loading}>
+            {loading && <span className='spinner' aria-hidden='true'/>}
+            {loading
+              ? (isRegister ? "Creating account..." : "Signing in...")
+              : (isRegister ? "Create account" : "Sign in")}
+          </button>
+
+        </form>
+      </main>
+
     </div>
   );
 }

@@ -1,37 +1,86 @@
 .navbar{
+    position: sticky;
+    top: 0;
+    z-index: 30;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 8px 4%;
+    justify-content: space-between;
+    height: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) clamp(16px, 3vw, 32px) 0;
+    background: rgba(255,255,255,.97);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+            backdrop-filter: blur(16px) saturate(1.5);
+    border-bottom: 1px solid var(--line);
 }
 
-.navbar .logo {
-    width: max(10%, 80px);
+.navbar-brand{
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
 }
 
-.navbar .profile{
-    width: 55px;
-    border-radius: 50%;
-    border: solid black 1px;
-    padding: 2px;
-    
+.navbar .logo{
+    height: 30px;
+    width: auto;
 }
+
 .navbar-right{
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 14px;
+}
+
+.navbar-user{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: .92rem;
+    color: var(--ink-2);
+}
+
+.avatar{
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(145deg, #2AA7E1, #0A6FA3);
+    box-shadow: 0 6px 14px -6px rgba(10,125,181,.8);
 }
 
 .logout-btn{
-    padding: 8px 20px;
-    border: 1px solid #181818;
-    border-radius: 50px;
-    background: transparent;
-    cursor: pointer;
-    transition: 300ms ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    font-weight: 600;
+    font-size: .92rem;
+    transition: background-color .2s, border-color .2s, transform .2s var(--ease-out), color .2s;
+}
+.logout-btn:active{ transform: scale(.95); }
+
+@media (hover:hover){
+    .logout-btn:hover{
+        background: var(--danger-bg);
+        border-color: #F3C3C6;
+        color: var(--danger);
+    }
 }
 
-.logout-btn:hover{
-    background-color: #181818;
-    color: white;
+@media (max-width: 560px){
+    .navbar .logo{ height: 26px; }
+    .navbar-role{ display: none; }
+    .logout-btn{
+        width: 44px;
+        height: 44px;
+        padding: 0;
+    }
+    .logout-btn span{ display: none; }
 }

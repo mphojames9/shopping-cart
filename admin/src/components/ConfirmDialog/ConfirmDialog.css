@@ -1,0 +1,78 @@
+.dialog-backdrop{
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: rgba(9,24,42,.5);
+    -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+    animation: fadeIn .25s ease both;
+}
+
+.dialog{
+    width: min(100%, 400px);
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding: 28px 24px 24px;
+    border-radius: 26px;
+    background: var(--surface);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    animation: dialogPop .45s var(--ease-spring) both;
+}
+
+.dialog-icon{
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 8px;
+    border-radius: 20px;
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+.dialog h2{
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+}
+
+.dialog p{
+    color: var(--ink-2);
+    overflow-wrap: anywhere;
+}
+
+.dialog-actions{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+@keyframes dialogPop{
+    from{ opacity: 0; transform: translateY(16px) scale(.92); }
+    to{ opacity: 1; transform: none; }
+}
+
+@media (max-width: 560px){
+    .dialog-backdrop{
+        align-items: end;
+        padding: 0;
+    }
+    .dialog{
+        width: 100%;
+        padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+        border-radius: 28px 28px 0 0;
+        animation: sheetUp .5s var(--ease-out) both;
+    }
+}
+
+@keyframes sheetUp{
+    from{ transform: translateY(100%); }
+    to{ transform: none; }
+}

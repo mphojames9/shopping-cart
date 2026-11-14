@@ -1,4 +1,5 @@
 import foodModel from "../models/foodModel.js";
+import imageModel from "../models/imageModel.js";
 import fs from 'fs';
 
 const addFood = async (req, res) =>{
@@ -8,18 +9,26 @@ const addFood = async (req, res) =>{
         }
         const price = Number(req.body.price);
         if (!req.body.name || !req.body.description || !req.body.category || !(price > 0)) {
-            fs.unlink(`uploads/${req.file.filename}`,()=>{})
             return res.json({success:false,message:"Name, description, category and a valid price are required"})
         }
 
-        const food = new foodModel({
-            name:req.body.name,
-            description:req.body.description,
-            price:price,
-            category:req.body.category,
-            image:req.file.filename
-        })
-        await food.save();
+        // the image goes into MongoDB (Render's disk does not survive a redeploy)
+        const filename = `${Date.now()}-${req.file.originalname}`.replace(/[^\w.-]/g,"_");
+        await imageModel.create({filename,contentType:req.file.mimetype,data:req.file.buffer});
+
+        try {
+            const food = new foodModel({
+                name:req.body.name,
+                description:req.body.description,
+                price:price,
+                category:req.body.category,
+                image:filename
+            })
+            await food.save();
+        } catch (error) {
+            await imageModel.deleteOne({filename}).catch(()=>{});
+            throw error;
+        }
         res.json({success:true,message:"Product Added"})
     }catch (error) {
         console.log(error)
@@ -44,7 +53,8 @@ const removeFood = async (req,res) => {
         if (!food) {
             return res.json({success:false,message:"Product not found"})
         }
-        fs.unlink(`uploads/${food.image}`,()=>{})
+        await imageModel.deleteOne({filename:food.image});
+        fs.unlink(`uploads/${food.image}`,()=>{}) // old images that shipped inside the repo
 
         await foodModel.findByIdAndDelete(req.body.id);
         res.json({success:true,message:"Product Removed"})

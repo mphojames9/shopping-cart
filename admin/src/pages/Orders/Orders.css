@@ -1,53 +1,304 @@
-.order-item{
-    display: grid;
-    grid-template-columns: 0.5fr 2fr 0.5fr 0.5fr 1fr;
-    align-items: start;
-    gap: 30px;
-    border: 1px solid #a9a9a9;
-    padding: 20px;
-    margin: 30px 0;
-    font-size: 14px;
-    color: #505050;
+/* ---------- status filter chips ---------- */
+.filters{
+    display: flex;
+    gap: 8px;
+    margin: 0 calc(-1 * var(--page-pad)) 20px;
+    padding: 2px var(--page-pad) 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    scroll-padding: 0 var(--page-pad);
 }
+.filters::-webkit-scrollbar{ display: none; }
 
-.order-item img{
-    width: 50px;
-}
-
-.order-item-food, .order-item-name{
+.filter{
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 8px 0 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface);
     font-weight: 600;
+    font-size: .92rem;
+    color: var(--ink-2);
+    scroll-snap-align: start;
+    transition: background-color .25s, color .25s, border-color .25s, transform .2s var(--ease-out);
+}
+.filter:active{ transform: scale(.96); }
+@media (hover:hover){
+    .filter:not(.is-active):hover{ border-color: #B6C3D3; color: var(--ink); }
 }
 
-.order-item-name{
-    margin-top: 30px;
-    margin-bottom: 5px;
+.filter-count{
+    display: grid;
+    place-items: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--bg);
+    font-size: .8rem;
+    font-variant-numeric: tabular-nums;
+    transition: background-color .25s, color .25s;
 }
 
-.order-item-address{
-    margin-bottom: 10px;
+.filter.is-active{
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+}
+.filter.is-active .filter-count{
+    background: rgba(255,255,255,.18);
+    color: #fff;
 }
 
-.order-item-date{
-    margin-top: 10px;
-    font-size: 12px;
-    color: #8a8a8a;
+/* ---------- order cards ---------- */
+.order-list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+    gap: 16px;
+    align-items: start;
 }
 
-.order-item select{
-    background-color: #ffe8e4;
-    border: 1px solid #a9a9a9;
-    width: max(10vw, 120px);
-    padding: 10px;
+.order-card{
+    --tone: #1E9BD7;
+    --tone-bg: var(--info-bg);
+    --tone-ink: var(--info);
+    display: grid;
+    gap: 18px;
+    padding: 20px;
+    transition: opacity .3s;
+}
+.order-card[data-tone="warn"]{ --tone: #E08A00; --tone-bg: var(--warn-bg); --tone-ink: var(--warn); }
+.order-card[data-tone="info"]{ --tone: #1E9BD7; --tone-bg: var(--info-bg); --tone-ink: var(--info); }
+.order-card[data-tone="ok"]{   --tone: #17A673; --tone-bg: var(--ok-bg);   --tone-ink: var(--ok); }
+
+.order-card.is-updating{ opacity: .6; }
+
+.order-top{
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+}
+.order-icon{
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: var(--r-md);
+    background: var(--tone-bg);
+    color: var(--tone-ink);
+    transition: background-color .4s, color .4s;
+}
+.order-who h3{
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    overflow-wrap: anywhere;
+}
+.order-who span{
+    font-size: .82rem;
+    color: var(--ink-3);
+}
+.order-total{
+    display: grid;
+    justify-items: end;
+}
+.order-total strong{
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+.order-total span{
+    font-size: .8rem;
+    color: var(--ink-3);
+}
+
+/* items */
+.order-items{
+    display: grid;
+    gap: 8px;
+    padding: 14px 16px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+}
+.order-items li{
+    display: flex;
+    gap: 10px;
+    font-size: .92rem;
+}
+.order-items .qty{
+    flex: none;
+    min-width: 34px;
+    font-weight: 700;
+    color: var(--brand-700);
+    font-variant-numeric: tabular-nums;
+}
+.order-items .name{
+    min-width: 0;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+/* customer contact */
+.order-contact{
+    display: grid;
+    gap: 6px;
+    font-size: .9rem;
+    color: var(--ink-2);
+}
+.order-contact p,
+.order-contact a{
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.order-contact svg{
+    flex: none;
+    margin-top: 3px;
+    color: var(--ink-3);
+}
+.order-contact span{ overflow-wrap: anywhere; }
+.order-contact a{
+    align-items: center;
+    width: fit-content;
+    padding: 6px 0;
+    font-weight: 600;
+    color: var(--brand-700);
+}
+.order-contact a svg{ margin-top: 0; color: inherit; }
+
+/* ---------- delivery stepper ---------- */
+.order-foot{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+}
+
+.stepper{
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+/* track runs from the first dot's centre to the last dot's centre */
+.stepper::before,
+.stepper::after{
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: calc(100% / 6);
+    height: 2px;
+    border-radius: 2px;
+}
+.stepper::before{
+    right: calc(100% / 6);
+    background: var(--line);
+}
+.stepper::after{
+    width: calc(var(--step) * 100% / 3);
+    background: var(--tone);
+    transition: width .8s var(--ease-out), background-color .4s;
+    animation: stepFill 1s var(--ease-out) .3s both;
+}
+@keyframes stepFill{ from{ width: 0; } }
+
+.stepper li{
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    text-align: center;
+}
+.dot{
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--line-strong);
+    background: var(--surface);
+    color: #fff;
+    transition: background-color .4s, border-color .4s, box-shadow .4s;
+}
+.stepper li.done .dot{
+    background: var(--tone);
+    border-color: var(--tone);
+}
+.stepper li[aria-current="step"] .dot{
+    box-shadow: 0 0 0 5px var(--tone-bg);
+}
+.stepper .label{
+    font-size: .74rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--ink-3);
+    transition: color .3s;
+}
+.stepper li.done .label{ color: var(--ink); }
+
+/* status picker: native select (best picker on phones) dressed as a pill */
+.status-select{
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 188px;
+    border-radius: 999px;
+    background: var(--tone-bg);
+    color: var(--tone-ink);
+    transition: background-color .4s, color .4s, box-shadow .2s;
+}
+.status-select:focus-within{ box-shadow: 0 0 0 4px rgba(30,155,215,.2); }
+.status-dot{
+    position: absolute;
+    left: 16px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--tone);
+    pointer-events: none;
+}
+.status-select select{
+    width: 100%;
+    height: 46px;
+    padding: 0 40px 0 36px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
     outline: none;
 }
+.status-select select:disabled{ cursor: progress; }
+.status-select > svg{
+    position: absolute;
+    right: 14px;
+    pointer-events: none;
+}
 
-@media (max-width:1000px){
-    .order-item{
-        grid-template-columns: 0.5fr 1fr 1fr;
-        font-size: 12px;
+/* ---------- skeleton ---------- */
+.order-card .skel-a{ height: 46px; }
+.order-card .skel-b{ height: 84px; }
+.order-card .skel-c{ height: 46px; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 560px){
+    .order-card{ padding: 16px; gap: 16px; }
+    .order-foot{
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
     }
-    .order-item select{
-        padding: 5px;
-        font-size: 12px;
-    }
+    .status-select{ min-width: 0; width: 100%; }
+    .status-select select{ height: 50px; }
 }
