@@ -21,7 +21,7 @@ const Home = () => {
   },[state]);
 
   return (
-    <div>
+    <div className='page'>
       <Header setCategory={setCategory}/>
       <ExploreMenu category={category} setCategory={setCategory}/>
       <FoodDisplay category={category} setCategory={setCategory}/>

@@ -1,12 +1,14 @@
 .order-summary{
     position: sticky;
-    top: 92px;
+    top: calc(var(--nav-h) + 24px);
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 24px;
-    border-radius: 18px;
-    background: var(--surface);
+    padding: 26px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    box-shadow: var(--shadow-sm);
 }
 
 .order-summary h2{
@@ -20,7 +22,7 @@
     flex-direction: column;
     gap: 10px;
     padding-bottom: 16px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px dashed #cfdae5;
     font-size: .95rem;
 }
 
@@ -59,11 +61,12 @@
 .summary-lines .summary-total{
     margin-top: 6px;
     padding-top: 16px;
-    border-top: 1px solid var(--line);
+    border-top: 1px dashed #cfdae5;
     color: var(--ink);
     font-family: var(--font-display);
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .summary-note{
@@ -75,5 +78,6 @@
 @media (max-width: 900px){
     .order-summary{
         position: static;
+        padding: 22px;
     }
 }

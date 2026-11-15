@@ -76,3 +76,21 @@
     from{ transform: translateY(100%); }
     to{ transform: none; }
 }
+
+/* compact phone sizing */
+@media (max-width: 600px){
+    .dialog{
+        gap: 6px;
+        padding: 22px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+    }
+    .dialog-icon{
+        width: 48px;
+        height: 48px;
+        margin-bottom: 4px;
+        border-radius: 16px;
+    }
+    .dialog-icon svg{ width: 22px; height: 22px; }
+    .dialog h2{ font-size: 17px; }
+    .dialog p{ font-size: 13.5px; }
+    .dialog-actions{ margin-top: 14px; }
+}

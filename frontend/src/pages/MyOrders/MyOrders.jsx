@@ -4,6 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { formatPrice } from '../../utils/format';
+import { PackageIcon } from '../../components/Icons';
 
 const statusClass = (status) =>
   status === 'Delivered' ? 'done' : status === 'Out for delivery' ? 'moving' : 'pending';
@@ -35,7 +36,8 @@ const MyOrders = ({setShowLogin}) => {
 
   if (!token) {
     return (
-      <div className='orders orders-message'>
+      <div className='orders orders-message page'>
+        <span className="orders-icon"><PackageIcon /></span>
         <h1>My orders</h1>
         <p>Sign in to see your orders.</p>
         <button type="button" className="btn btn-primary" onClick={()=>setShowLogin(true)}>Sign in</button>
@@ -44,22 +46,25 @@ const MyOrders = ({setShowLogin}) => {
   }
 
   return (
-    <div className='orders'>
+    <div className='orders page'>
       <div className="orders-head">
         <h1>My orders</h1>
         <button type="button" className="btn btn-ghost btn-sm" onClick={fetchOrders}>Refresh status</button>
       </div>
 
       {loading
-        ? <p className="orders-note" aria-busy="true">Loading your orders…</p>
+        ? <div className="orders-list" aria-busy="true" aria-label="Loading your orders">
+            {Array.from({length:3}).map((_,i)=><div key={i} className="order-skeleton" />)}
+          </div>
         : data.length === 0
           ? <div className="orders-message">
+              <span className="orders-icon"><PackageIcon /></span>
               <p>You have no orders yet.</p>
               <Link to='/shopping-cart' state={{scrollTo:'food-display'}} className="btn btn-primary">Start shopping</Link>
             </div>
           : <ul className="orders-list">
-              {data.map((order)=>(
-                <li key={order._id} className='order'>
+              {data.map((order,i)=>(
+                <li key={order._id} className='order' style={{'--i':i}}>
                   <div className="order-meta">
                     <strong>{formatDate(order.date)}</strong>
                     <span>Order #{String(order._id).slice(-6).toUpperCase()}</span>

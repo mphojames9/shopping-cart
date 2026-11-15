@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from './components/NavBar/NavBar';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import PlaceOder from './pages/PlaceOrder/PlaceOder';
 import Home from './pages/Home/Home';
 import Cart from './pages/Cart/Cart';
@@ -8,10 +8,17 @@ import Verify from './pages/Verify/Verify';
 import MyOrders from './pages/MyOrders/MyOrders';
 import Footer from './components/Footer/Footer';
 import LoginPopup from './components/LoginPopup/LoginPopup';
+import Toast from './components/Toast/Toast';
 
 const App = () => {
 
   const [showLogin,setShowLogin] = useState(false)
+  const { pathname, state } = useLocation()
+
+  // new page -> start at the top (unless a link asked to scroll to a section)
+  useEffect(()=>{
+    if (!state?.scrollTo) window.scrollTo({top:0,left:0,behavior:'instant'});
+  },[pathname])
 
   return (
     <>
@@ -27,6 +34,7 @@ const App = () => {
         </Routes>
       </main>
       <Footer />
+      <Toast />
     </>
   );
 }

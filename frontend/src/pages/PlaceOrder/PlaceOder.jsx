@@ -66,7 +66,7 @@ const PlaceOder = () => {
   },[ready,token])
 
   return (
-    <form onSubmit={placeOrder} className='checkout'>
+    <form onSubmit={placeOrder} className='checkout page'>
       <div className='checkout-form'>
         <h1>Delivery details</h1>
         <div className='field-row'>

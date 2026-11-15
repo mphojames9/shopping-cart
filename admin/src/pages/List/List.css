@@ -128,3 +128,21 @@
 @media (max-width: 860px){
     .page-head .btn{ display: none; }
 }
+
+/* compact phone sizing */
+@media (max-width: 600px){
+    .list-search{ margin-bottom: 12px; }
+    .list-row{
+        grid-template-columns: 56px minmax(0, 1fr) 40px;
+        gap: 2px 12px;
+        padding: 10px 6px 10px 12px;
+    }
+    .list-row > .thumb,
+    .list-row > .skel-thumb{ width: 56px; height: 56px; }
+    .thumb{ border-radius: 12px; }
+    .thumb svg{ width: 18px; height: 18px; }
+    .list-name{ font-size: 14px; line-height: 1.3; }
+    .list-price{ font-size: 13px; }
+    .list-meta{ gap: 2px 8px; }
+    .list-row .icon-btn svg{ width: 17px; height: 17px; }
+}

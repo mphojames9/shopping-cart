@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './LoginPopup.css';
 import { StoreContext } from '../../context/StoreContext';
 import axios from "axios";
+import { CloseIcon } from '../Icons';
 
 const LoginPopup = ({setShowLogin}) => {
 
@@ -10,6 +11,7 @@ const LoginPopup = ({setShowLogin}) => {
     const [currState,setCurrState] = useState("Login")
     const [loading,setLoading] = useState(false)
     const [error,setError] = useState("")
+    const [showPassword,setShowPassword] = useState(false)
     const [data,setData] = useState({
         name:"",
         email:"",
@@ -60,41 +62,56 @@ const LoginPopup = ({setShowLogin}) => {
         return ()=>document.removeEventListener("keydown",onKey);
     },[setShowLogin])
 
+    // keep the page behind the popup from scrolling
+    useEffect(()=>{
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return ()=>{ document.body.style.overflow = previous; };
+    },[])
+
     return (
     <div className='auth-overlay' onMouseDown={(event)=>{ if (event.target===event.currentTarget) setShowLogin(false) }}>
         <form onSubmit={onLogin} className='auth-card' role="dialog" aria-modal="true" aria-labelledby="auth-title">
-            <button type="button" className="auth-close" aria-label="Close" onClick={()=>setShowLogin(false)}>&times;</button>
+            <span className="auth-handle" aria-hidden="true" />
+            <button type="button" className="auth-close" aria-label="Close" onClick={()=>setShowLogin(false)}><CloseIcon /></button>
 
-            <div>
-                <h2 id="auth-title">{isSignUp?"Create your account":"Welcome back"}</h2>
-                <p className="auth-sub">{isSignUp?"Save your cart and track your orders.":"Sign in to check out and see your orders."}</p>
+            <div className="auth-tabs" role="tablist" aria-label="Sign in or create an account">
+                <button type="button" role="tab" aria-selected={!isSignUp} className={!isSignUp?'on':''} onClick={()=>switchState("Login")}>Sign in</button>
+                <button type="button" role="tab" aria-selected={isSignUp} className={isSignUp?'on':''} onClick={()=>switchState("Sign Up")}>Create account</button>
             </div>
 
-            {isSignUp &&
-                <label className="field"><span>Name</span><input name='name' autoComplete='name' onChange={onChangeHandler} value={data.name} type='text' autoFocus required /></label>
-            }
-            <label className="field"><span>Email</span><input name='email' autoComplete='email' onChange={onChangeHandler} value={data.email} type='email' autoFocus={!isSignUp} required /></label>
-            <label className="field"><span>Password</span><input name='password' autoComplete={isSignUp?'new-password':'current-password'} minLength={isSignUp?8:undefined} onChange={onChangeHandler} value={data.password} type='password' required /></label>
-            {isSignUp && <p className="auth-hint">Use at least 8 characters.</p>}
+            <div key={currState} className="auth-body">
+                <div>
+                    <h2 id="auth-title">{isSignUp?"Create your account":"Welcome back"}</h2>
+                    <p className="auth-sub">{isSignUp?"Save your cart and track your orders.":"Sign in to check out and see your orders."}</p>
+                </div>
 
-            {error && <p className="auth-error" role="alert">{error}</p>}
-
-            {isSignUp &&
-                <label className="auth-terms">
-                    <input type='checkbox' required />
-                    <span>I agree to the terms of use and privacy policy</span>
+                {isSignUp &&
+                    <label className="field"><span>Name</span><input name='name' autoComplete='name' onChange={onChangeHandler} value={data.name} type='text' autoFocus required /></label>
+                }
+                <label className="field"><span>Email</span><input name='email' autoComplete='email' onChange={onChangeHandler} value={data.email} type='email' autoFocus={!isSignUp} required /></label>
+                <label className="field">
+                    <span>Password</span>
+                    <div className="password-wrap">
+                        <input name='password' autoComplete={isSignUp?'new-password':'current-password'} minLength={isSignUp?8:undefined} onChange={onChangeHandler} value={data.password} type={showPassword?'text':'password'} required />
+                        <button type="button" className="password-toggle" onClick={()=>setShowPassword((v)=>!v)} aria-pressed={showPassword}>{showPassword?'Hide':'Show'}</button>
+                    </div>
                 </label>
-            }
+                {isSignUp && <p className="auth-hint">Use at least 8 characters.</p>}
 
-            <button type='submit' className="btn btn-primary btn-block" disabled={loading}>
-                {loading?"Please wait…":(isSignUp?"Create account":"Sign in")}
-            </button>
+                {error && <p className="auth-error" role="alert">{error}</p>}
 
-            <p className="auth-switch">
-                {isSignUp
-                    ? <>Already have an account? <button type="button" className="link-btn" onClick={()=>switchState("Login")}>Sign in</button></>
-                    : <>New here? <button type="button" className="link-btn" onClick={()=>switchState("Sign Up")}>Create an account</button></>}
-            </p>
+                {isSignUp &&
+                    <label className="auth-terms">
+                        <input type='checkbox' required />
+                        <span>I agree to the terms of use and privacy policy</span>
+                    </label>
+                }
+
+                <button type='submit' className="btn btn-primary btn-block" disabled={loading}>
+                    {loading?"Please wait…":(isSignUp?"Create account":"Sign in")}
+                </button>
+            </div>
         </form>
     </div>
   );

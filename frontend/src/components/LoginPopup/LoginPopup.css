@@ -1,29 +1,106 @@
 .auth-overlay{
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 60;
     display: grid;
     place-items: center;
     padding: 16px;
-    background: rgba(11, 27, 43, .55);
-    backdrop-filter: blur(3px);
+    background: rgba(6, 22, 38, .6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    animation: pageIn 250ms ease both;
 }
 
 .auth-card{
     position: relative;
-    width: min(420px, 100%);
+    width: min(440px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 28px;
+    border-radius: 28px;
+    background: var(--paper);
+    box-shadow: var(--shadow-lg);
+    animation: authIn 450ms var(--spring);
+}
+
+@keyframes authIn{
+    from{ opacity: 0; transform: translateY(24px) scale(.94); }
+    to{ opacity: 1; transform: none; }
+}
+
+@keyframes sheetUp{
+    from{ transform: translateY(100%); }
+    to{ transform: none; }
+}
+
+.auth-handle{
+    display: none;
+}
+
+.auth-close{
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--panel);
+    color: var(--ink);
+    transition: transform 250ms var(--spring), background-color 200ms;
+}
+
+.auth-close svg{
+    width: 18px;
+    height: 18px;
+}
+
+.auth-close:hover{
+    transform: rotate(90deg);
+}
+
+/* segmented switch */
+.auth-tabs{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-right: 48px;
+    padding: 4px;
+    border-radius: 14px;
+    background: var(--panel);
+}
+
+.auth-tabs button{
+    min-height: 40px;
+    border: none;
+    border-radius: 11px;
+    background: transparent;
+    color: var(--muted);
+    font-size: .92rem;
+    font-weight: 700;
+    transition: background-color 250ms, color 250ms, box-shadow 250ms;
+}
+
+.auth-tabs button.on{
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(10, 31, 51, .14);
+}
+
+.auth-body{
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 32px 28px 28px;
-    border-radius: 20px;
-    background: #fff;
-    animation: fadeIn 250ms ease-out;
+    animation: rise 450ms var(--ease) both;
 }
 
 .auth-card h2{
-    font-size: 1.7rem;
+    font-size: 1.8rem;
     font-weight: 800;
 }
 
@@ -32,23 +109,30 @@
     color: var(--muted);
 }
 
-.auth-close{
+.password-wrap{
+    position: relative;
+}
+
+.field .password-wrap input{
+    padding-right: 74px;
+}
+
+.password-toggle{
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 36px;
-    height: 36px;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    padding: 8px 12px;
     border: none;
     border-radius: 10px;
     background: none;
-    font-size: 1.6rem;
-    line-height: 1;
-    color: var(--muted);
+    color: var(--brand-strong);
+    font-size: .88rem;
+    font-weight: 700;
 }
 
-.auth-close:hover{
-    background: var(--surface);
-    color: var(--ink);
+.password-toggle:hover{
+    background: var(--panel);
 }
 
 .auth-hint{
@@ -58,11 +142,12 @@
 }
 
 .auth-error{
-    padding: 10px 12px;
-    border-radius: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
     background: #fdecea;
     color: var(--danger);
     font-size: .92rem;
+    animation: scaleIn 250ms var(--ease);
 }
 
 .auth-terms{
@@ -74,12 +159,41 @@
 }
 
 .auth-terms input{
-    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
     accent-color: var(--ink);
 }
 
-.auth-switch{
-    text-align: center;
-    color: var(--muted);
-    font-size: .95rem;
+/* on phones the card becomes a bottom sheet */
+@media (max-width: 560px){
+    .auth-overlay{
+        place-items: end center;
+        padding: 0;
+    }
+
+    .auth-card{
+        width: 100%;
+        gap: 18px;
+        padding: 12px 20px calc(24px + var(--safe-bottom));
+        border-radius: 28px 28px 0 0;
+        animation: sheetUp 450ms var(--ease);
+    }
+
+    .auth-handle{
+        display: block;
+        width: 40px;
+        height: 5px;
+        margin: 0 auto 4px;
+        border-radius: 999px;
+        background: #cfd9e3;
+    }
+
+    .auth-close{
+        top: 22px;
+    }
+
+    .auth-card h2{
+        font-size: 1.55rem;
+    }
 }

@@ -1,55 +1,79 @@
 .navbar{
     position: sticky;
     top: 0;
-    z-index: 20;
-    background: rgba(255, 255, 255, .92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
+    z-index: 30;
+    background: rgba(255, 255, 255, .94);
+    backdrop-filter: saturate(1.6) blur(18px);
+    -webkit-backdrop-filter: saturate(1.6) blur(18px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 300ms, box-shadow 300ms;
+}
+
+.navbar.scrolled{
+    border-bottom-color: var(--line);
+    box-shadow: 0 8px 28px rgba(10, 31, 51, .07);
 }
 
 .navbar-inner{
-    width: min(1200px, 92%);
-    height: 68px;
+    width: min(1240px, calc(100% - var(--gutter) * 2));
+    height: var(--nav-h);
     margin: 0 auto;
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 28px;
 }
 
 .navbar-brand img{
     height: 32px;
     width: auto;
+    transition: transform 300ms var(--spring);
+}
+
+.navbar-brand:active img{
+    transform: scale(.95);
 }
 
 .navbar-links{
     display: flex;
-    gap: 28px;
-    font-weight: 500;
+    gap: 4px;
+}
+
+.navbar-links a{
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 600;
     color: var(--muted);
+    transition: color 200ms, background-color 200ms;
 }
 
 .navbar-links a:hover{
     color: var(--ink);
+    background: var(--panel);
 }
 
 .navbar-actions{
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .icon-btn{
     position: relative;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
-    border-radius: 10px;
+    border-radius: 50%;
+    transition: background-color 200ms, transform 200ms var(--spring);
 }
 
 .icon-btn:hover{
-    background: var(--surface);
+    background: var(--panel);
+}
+
+.icon-btn:active{
+    transform: scale(.9);
 }
 
 .icon-btn svg{
@@ -59,34 +83,42 @@
 
 .cart-badge{
     position: absolute;
-    top: 1px;
-    right: -1px;
+    top: 2px;
+    right: 0;
     min-width: 18px;
     height: 18px;
     padding: 0 5px;
     display: grid;
     place-items: center;
     border-radius: 999px;
-    background: var(--brand-deep);
+    background: var(--brand-strong);
+    box-shadow: 0 0 0 2px #fff;
     color: #fff;
     font-size: 11px;
     font-weight: 700;
+    line-height: 1;
+    animation: badgePop 450ms var(--spring);
 }
 
+/* account dropdown */
 .account{
     position: relative;
+    margin-left: 4px;
 }
 
 .account summary{
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
+    gap: 8px;
+    height: 44px;
+    padding: 0 14px 0 12px;
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 999px;
+    background: var(--paper);
     font-weight: 600;
     cursor: pointer;
+    transition: border-color 200ms;
 }
 
 .account summary::-webkit-details-marker{
@@ -97,46 +129,147 @@
     border-color: var(--ink);
 }
 
+.account summary svg{
+    width: 20px;
+    height: 20px;
+}
+
+.account .account-chevron{
+    width: 16px;
+    height: 16px;
+    transition: transform 250ms var(--ease);
+}
+
+.account[open] .account-chevron{
+    transform: rotate(180deg);
+}
+
 .account-menu{
     position: absolute;
     right: 0;
-    top: calc(100% + 8px);
-    min-width: 170px;
+    top: calc(100% + 10px);
+    z-index: 5;
+    min-width: 190px;
     display: flex;
     flex-direction: column;
     padding: 6px;
-    background: #fff;
+    background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 12px;
-    box-shadow: 0 12px 30px rgba(11, 27, 43, .12);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    transform-origin: top right;
+    animation: scaleIn 220ms var(--ease);
 }
 
 .account-menu a,
 .account-menu button{
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     background: none;
     text-align: left;
-    font-weight: 500;
+    font-weight: 600;
+    transition: background-color 150ms;
 }
 
 .account-menu a:hover,
 .account-menu button:hover{
-    background: var(--surface);
+    background: var(--panel);
+}
+
+/* ---------- phone tab bar ---------- */
+.tabbar{
+    display: none;
+}
+
+.tab-icon{
+    position: relative;
+    display: grid;
+}
+
+.tab-icon .cart-badge{
+    top: -6px;
+    right: -10px;
+    box-shadow: 0 0 0 2px #fff;
 }
 
 @media (max-width: 760px){
-    .navbar-inner{
-        height: 60px;
-        gap: 12px;
+    .navbar-links,
+    .navbar-actions .icon-btn-cart,
+    .navbar-actions .signin-btn,
+    .account .account-label,
+    .account .account-chevron{
+        display: none;
     }
 
-    .navbar-links{
-        display: none;
+    .navbar-inner{
+        gap: 12px;
     }
 
     .navbar-brand img{
         height: 28px;
+    }
+
+    .account{
+        margin-left: 0;
+    }
+
+    .account summary{
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .tabbar{
+        position: fixed;
+        z-index: 40;
+        left: 12px;
+        right: 12px;
+        bottom: calc(10px + var(--safe-bottom));
+        height: var(--tabbar-h);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        padding: 6px;
+        border: 1px solid rgba(10, 31, 51, .06);
+        border-radius: 26px;
+        background: rgba(255, 255, 255, .86);
+        backdrop-filter: saturate(1.8) blur(22px);
+        -webkit-backdrop-filter: saturate(1.8) blur(22px);
+        box-shadow: 0 14px 44px rgba(10, 31, 51, .2);
+    }
+
+    .tab{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        border: none;
+        border-radius: 20px;
+        background: none;
+        color: var(--muted);
+        font-size: .72rem;
+        font-weight: 700;
+        transition: color 250ms, background-color 250ms;
+    }
+
+    .tab svg{
+        width: 23px;
+        height: 23px;
+        transition: transform 400ms var(--spring);
+    }
+
+    .tab.active{
+        color: var(--brand-deep);
+        background: rgba(42, 161, 217, .15);
+    }
+
+    .tab.active svg{
+        transform: translateY(-1px) scale(1.12);
+    }
+
+    .tab:active svg{
+        transform: scale(.88);
     }
 }
