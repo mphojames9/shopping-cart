@@ -10,7 +10,7 @@
 /* desktop: table-like rows */
 .list-row{
     display: grid;
-    grid-template-columns: 64px minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) 44px;
+    grid-template-columns: 64px minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) 92px;
     align-items: center;
     gap: 16px;
     max-height: 160px;
@@ -66,6 +66,17 @@
     font-variant-numeric: tabular-nums;
 }
 
+/* edit + remove buttons */
+.list-actions{
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+}
+@media (hover:hover){
+    .icon-btn.accent:hover{ background: var(--brand-50); color: var(--brand-600); }
+}
+.icon-btn.accent{ color: var(--ink-3); }
+
 /* row leaves with a slide + collapse after a successful delete */
 .list-row.is-leaving{
     overflow: hidden;
@@ -94,7 +105,7 @@
     .list-head{ display: none; }
 
     .list-row{
-        grid-template-columns: 72px minmax(0, 1fr) 44px;
+        grid-template-columns: 72px minmax(0, 1fr) 92px;
         grid-template-areas:
             "thumb name act"
             "thumb meta act";
@@ -104,7 +115,7 @@
     .list-row > .thumb,
     .list-row > .skel-thumb{ grid-area: thumb; width: 72px; height: 72px; align-self: center; }
     .list-row > .list-name{ grid-area: name; align-self: end; }
-    .list-row > .icon-btn{ grid-area: act; align-self: center; }
+    .list-row > .list-actions{ grid-area: act; align-self: center; }
 
     .list-meta{
         grid-area: meta;
@@ -133,7 +144,7 @@
 @media (max-width: 600px){
     .list-search{ margin-bottom: 12px; }
     .list-row{
-        grid-template-columns: 56px minmax(0, 1fr) 40px;
+        grid-template-columns: 56px minmax(0, 1fr) 84px;
         gap: 2px 12px;
         padding: 10px 6px 10px 12px;
     }
@@ -145,4 +156,5 @@
     .list-price{ font-size: 13px; }
     .list-meta{ gap: 2px 8px; }
     .list-row .icon-btn svg{ width: 17px; height: 17px; }
+    .list-actions{ gap: 4px; }
 }

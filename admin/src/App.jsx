@@ -6,6 +6,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Orders from './pages/Orders/Orders';
 import List from './pages/List/List';
 import Add from './pages/Add/Add';
+import Edit from './pages/Edit/Edit';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -54,6 +55,7 @@ const App = () => {
               <Route path='/' element={<Navigate to='/list' replace/>}/>
               <Route path='/add' element={<Add/>}/>
               <Route path='/list' element={<List/>}/>
+              <Route path='/edit/:id' element={<Edit/>}/>
               <Route path='/orders' element={<Orders/>}/>
               <Route path='*' element={<Navigate to='/list' replace/>}/>
             </Routes>

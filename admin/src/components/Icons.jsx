@@ -160,3 +160,12 @@ export const HeadphonesIcon = (p) => (
     <rect x="17" y="14" width="4" height="7" rx="1.5" />
   </Svg>
 );
+
+export const PencilIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z" />
+    <path d="M14.5 7.5l3 3" />
+  </Svg>
+);
+
+export const ChevronLeftIcon = (p) => <Svg {...p}><path d="M15 6l-6 6 6 6" /></Svg>;

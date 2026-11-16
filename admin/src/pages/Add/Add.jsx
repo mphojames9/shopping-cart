@@ -4,8 +4,7 @@ import api, { errorMessage } from '../../api';
 import { toast } from 'react-toastify';
 import { ImageIcon, CloseIcon, ChevronDownIcon } from '../../components/Icons';
 import { formatRand } from '../../utils/format';
-
-const CATEGORIES = ["Accessories","Phones","Laptops","Smart TV","Monitor","Taplets","Office","Gaming"];
+import { CATEGORIES } from '../../utils/categories';
 
 const emptyData = {
     name:"",

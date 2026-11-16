@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import api, { API_URL, errorMessage } from '../../api';
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
-import { ImageIcon, PlusIcon, SearchIcon, TrashIcon, BoxIcon } from '../../components/Icons';
+import { ImageIcon, PlusIcon, SearchIcon, TrashIcon, BoxIcon, PencilIcon } from '../../components/Icons';
 import { formatRand, wait } from '../../utils/format';
 
 const List = () => {
@@ -153,14 +153,23 @@ const List = () => {
                   <span className="chip">{item.category}</span>
                   <p className="list-price">{formatRand(item.price)}</p>
                 </div>
-                <button
-                  type="button"
-                  className="icon-btn danger"
-                  onClick={()=>setTarget(item)}
-                  aria-label={`Remove ${item.name}`}
-                >
-                  <TrashIcon size={19} />
-                </button>
+                <div className="list-actions">
+                  <Link
+                    to={`/edit/${item._id}`}
+                    className="icon-btn accent"
+                    aria-label={`Edit ${item.name}`}
+                  >
+                    <PencilIcon size={19} />
+                  </Link>
+                  <button
+                    type="button"
+                    className="icon-btn danger"
+                    onClick={()=>setTarget(item)}
+                    aria-label={`Remove ${item.name}`}
+                  >
+                    <TrashIcon size={19} />
+                  </button>
+                </div>
               </div>
             ))}
           </>

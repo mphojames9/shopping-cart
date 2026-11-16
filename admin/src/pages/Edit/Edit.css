@@ -1,0 +1,44 @@
+/* the Edit page reuses the form, dropzone and preview styles from Add.css */
+
+.edit-back{
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin: 0 0 8px -4px;
+    padding: 4px 10px 4px 4px;
+    border-radius: 999px;
+    color: var(--ink-2);
+    font-size: .9rem;
+    font-weight: 600;
+    transition: color .2s, background-color .2s;
+}
+@media (hover:hover){
+    .edit-back:hover{ color: var(--brand-600); background: var(--brand-50); }
+}
+
+.edit-actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.edit-actions .add-btn{ justify-self: auto; }
+.edit-cancel{
+    min-height: 54px;
+    min-width: 120px;
+}
+.edit-cancel[aria-disabled="true"]{
+    opacity: .6;
+    pointer-events: none;
+}
+
+/* loading skeleton */
+.edit-skel-photo{ height: 232px; border-radius: var(--r-lg); }
+.edit-skel-line{ height: 48px; border-radius: var(--r-md); }
+.edit-skel-area{ height: 120px; border-radius: var(--r-md); }
+
+@media (max-width: 560px){
+    .edit-actions{ display: grid; grid-template-columns: 1fr; }
+    .edit-actions .add-btn{ justify-self: stretch; }
+    .edit-cancel{ min-height: 46px; }
+    .edit-skel-photo{ height: 150px; }
+}

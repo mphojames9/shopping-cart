@@ -5,13 +5,13 @@ import { PlusIcon, BoxIcon, ReceiptIcon } from '../Icons';
 
 const items = [
   { to:'/add',    label:'Add product', Icon:PlusIcon },
-  { to:'/list',   label:'Products',    Icon:BoxIcon },
+  { to:'/list',   label:'Products',    Icon:BoxIcon, also:['/edit'] },
   { to:'/orders', label:'Orders',      Icon:ReceiptIcon },
 ];
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  const activeIndex = Math.max(0, items.findIndex((item)=>pathname.startsWith(item.to)));
+  const activeIndex = Math.max(0, items.findIndex((item)=>[item.to,...(item.also||[])].some((path)=>pathname.startsWith(path))));
 
   return (
     <nav className='sidebar' aria-label='Main' style={{'--idx': activeIndex}}>

@@ -1,5 +1,5 @@
 import express from 'express';
-import { addFood, listFood, removeFood } from "../controllers/foodController.js";
+import { addFood, listFood, removeFood, updateFood } from "../controllers/foodController.js";
 import { adminMiddleware } from "../middleware/auth.js";
 import multer from 'multer';
 
@@ -16,6 +16,7 @@ const upload = multer({
 
 foodRouter.post("/add",adminMiddleware,upload.single("image"),addFood)
 foodRouter.get("/list",listFood)
+foodRouter.post("/update",adminMiddleware,upload.single("image"),updateFood)
 foodRouter.post("/remove",adminMiddleware,removeFood);
 
 export default foodRouter;
