@@ -7,7 +7,7 @@ import { LogoutIcon, UserIcon } from '../Icons';
 const Navbar = ({logout}) => {
   return (
     <header className='navbar'>
-      <NavLink to='/list' className='navbar-brand' aria-label='One stop, go to products'>
+      <NavLink to='/dashboard' className='navbar-brand' aria-label='One stop, go to dashboard'>
         <img src={assets.logo} alt="One stop" className="logo" />
       </NavLink>
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './Orders.css';
+import { useSearchParams } from 'react-router-dom';
 import api, { errorMessage } from '../../api';
 import { toast } from 'react-toastify';
 import { BoxIcon, CheckIcon, ChevronDownIcon, MapPinIcon, PhoneIcon, ReceiptIcon } from '../../components/Icons';
@@ -12,7 +13,9 @@ const Orders = () => {
 
   const [orders,setOrders] = useState([]);
   const [loading,setLoading] = useState(true);
-  const [filter,setFilter] = useState("All");
+  const [searchParams] = useSearchParams();
+  const requestedStatus = searchParams.get("status");
+  const [filter,setFilter] = useState(STATUSES.includes(requestedStatus) ? requestedStatus : "All");
   const [updatingId,setUpdatingId] = useState(null);
 
   const fetchOrders = async () => {

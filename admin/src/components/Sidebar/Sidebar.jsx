@@ -1,9 +1,10 @@
 import React from 'react';
 import './Sidebar.css';
 import { NavLink, useLocation } from 'react-router-dom';
-import { PlusIcon, BoxIcon, ReceiptIcon } from '../Icons';
+import { DashboardIcon, PlusIcon, BoxIcon, ReceiptIcon } from '../Icons';
 
 const items = [
+  { to:'/dashboard', label:'Dashboard', Icon:DashboardIcon },
   { to:'/add',    label:'Add product', Icon:PlusIcon },
   { to:'/list',   label:'Products',    Icon:BoxIcon, also:['/edit'] },
   { to:'/orders', label:'Orders',      Icon:ReceiptIcon },
@@ -14,7 +15,7 @@ const Sidebar = () => {
   const activeIndex = Math.max(0, items.findIndex((item)=>[item.to,...(item.also||[])].some((path)=>pathname.startsWith(path))));
 
   return (
-    <nav className='sidebar' aria-label='Main' style={{'--idx': activeIndex}}>
+    <nav className='sidebar' aria-label='Main' style={{'--idx': activeIndex, '--count': items.length}}>
       {/* one pill that slides to the active item (left sidebar on desktop, bottom dock on mobile) */}
       <span className='sidebar-indicator' aria-hidden='true' />
       {items.map(({ to, label, Icon })=>(

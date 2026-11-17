@@ -3,6 +3,7 @@ import Navbar from './components/Navbar/Navbar';
 import Sidebar from './components/Sidebar/Sidebar';
 import Login from './components/Login/Login';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import Dashboard from './pages/Dashboard/Dashboard';
 import Orders from './pages/Orders/Orders';
 import List from './pages/List/List';
 import Add from './pages/Add/Add';
@@ -52,12 +53,13 @@ const App = () => {
           {/* keyed by path so every page change plays the entrance animation */}
           <div className="page" key={location.pathname}>
             <Routes location={location}>
-              <Route path='/' element={<Navigate to='/list' replace/>}/>
+              <Route path='/' element={<Navigate to='/dashboard' replace/>}/>
+              <Route path='/dashboard' element={<Dashboard/>}/>
               <Route path='/add' element={<Add/>}/>
               <Route path='/list' element={<List/>}/>
               <Route path='/edit/:id' element={<Edit/>}/>
               <Route path='/orders' element={<Orders/>}/>
-              <Route path='*' element={<Navigate to='/list' replace/>}/>
+              <Route path='*' element={<Navigate to='/dashboard' replace/>}/>
             </Routes>
           </div>
         </main>

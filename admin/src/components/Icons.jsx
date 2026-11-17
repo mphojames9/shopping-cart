@@ -169,3 +169,68 @@ export const PencilIcon = (p) => (
 );
 
 export const ChevronLeftIcon = (p) => <Svg {...p}><path d="M15 6l-6 6 6 6" /></Svg>;
+
+export const DashboardIcon = (p) => (
+  <Svg {...p}>
+    <rect x="3" y="3" width="8" height="9" rx="2" />
+    <rect x="13" y="3" width="8" height="5" rx="2" />
+    <rect x="13" y="12" width="8" height="9" rx="2" />
+    <rect x="3" y="16" width="8" height="5" rx="2" />
+  </Svg>
+);
+
+export const TrendUpIcon = (p) => (
+  <Svg {...p} strokeWidth="2.2">
+    <path d="M3 17l6-6 4 4 8-8" />
+    <path d="M15 7h6v6" />
+  </Svg>
+);
+
+export const TrendDownIcon = (p) => (
+  <Svg {...p} strokeWidth="2.2">
+    <path d="M3 7l6 6 4-4 8 8" />
+    <path d="M15 17h6v-6" />
+  </Svg>
+);
+
+export const RefreshIcon = (p) => (
+  <Svg {...p}>
+    <path d="M20 11a8 8 0 0 0-14.9-3M4 5v4h4" />
+    <path d="M4 13a8 8 0 0 0 14.9 3M20 19v-4h-4" />
+  </Svg>
+);
+
+export const SparklesIcon = (p) => (
+  <Svg {...p}>
+    <path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z" />
+    <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" />
+  </Svg>
+);
+
+export const ArrowRightIcon = (p) => (
+  <Svg {...p}>
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </Svg>
+);
+
+export const WalletIcon = (p) => (
+  <Svg {...p}>
+    <rect x="3" y="6" width="18" height="14" rx="3" />
+    <path d="M3 10h18" />
+    <path d="M16 15h2" />
+  </Svg>
+);
+
+export const TagIcon = (p) => (
+  <Svg {...p}>
+    <path d="M3 3h8l9.5 9.5a2 2 0 0 1 0 2.8l-5.2 5.2a2 2 0 0 1-2.8 0L3 11z" />
+    <circle cx="7.5" cy="7.5" r="1.5" />
+  </Svg>
+);
+
+export const CalendarIcon = (p) => (
+  <Svg {...p}>
+    <rect x="3" y="5" width="18" height="16" rx="3" />
+    <path d="M3 10h18M8 3v4M16 3v4" />
+  </Svg>
+);

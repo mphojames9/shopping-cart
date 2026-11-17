@@ -92,7 +92,7 @@
         bottom: 6px;
         left: 6px;
         right: auto;
-        width: calc((100% - 12px) / 3);
+        width: calc((100% - 12px) / var(--count, 3));
         height: auto;
         border-radius: 20px;
         transform: translateX(calc(var(--idx) * 100%));
@@ -129,7 +129,7 @@
         top: 4px;
         bottom: 4px;
         left: 4px;
-        width: calc((100% - 8px) / 3);
+        width: calc((100% - 8px) / var(--count, 3));
         border-radius: 16px;
     }
     .sidebar-option{
