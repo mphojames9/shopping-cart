@@ -151,6 +151,7 @@ const List = () => {
                 <p className="list-name">{item.name}</p>
                 <div className="list-meta">
                   <span className="chip">{item.category}</span>
+                  {item.specs?.length > 0 && <span className="list-specs">{item.specs.length} {item.specs.length === 1 ? "spec" : "specs"}</span>}
                   <p className="list-price">{formatRand(item.price)}</p>
                 </div>
                 <div className="list-actions">

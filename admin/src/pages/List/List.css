@@ -61,6 +61,13 @@
 .list-meta{ display: contents; }
 .list-meta .chip{ justify-self: start; }
 
+.list-specs{
+    color: var(--ink-3);
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 .list-price{
     font-weight: 700;
     font-variant-numeric: tabular-nums;

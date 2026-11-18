@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { ImageIcon, CloseIcon, ChevronDownIcon, ChevronLeftIcon, BoxIcon } from '../../components/Icons';
 import { formatRand } from '../../utils/format';
 import { CATEGORIES } from '../../utils/categories';
+import { cleanSpecs, toRows } from '../../utils/specs';
+import SpecsEditor from '../../components/SpecsEditor/SpecsEditor';
 
 const Edit = () => {
 
@@ -16,6 +18,7 @@ const Edit = () => {
     const [status,setStatus] = useState("loading");   // loading | ready | missing | error
     const [product,setProduct] = useState(null);      // the product as it is saved right now
     const [data,setData] = useState(null);            // the form values
+    const [specRows,setSpecRows] = useState([]);       // the specifications editor rows
     const [image,setImage] = useState(null);          // a newly picked photo (null = keep the current one)
     const [currentBroken,setCurrentBroken] = useState(false);
     const [dragging,setDragging] = useState(false);
@@ -46,6 +49,7 @@ const Edit = () => {
                     price:String(found.price),
                     category:found.category
                 });
+                setSpecRows(toRows(found.specs));
                 setImage(null);
                 setCurrentBroken(false);
                 setStatus("ready");
@@ -72,9 +76,12 @@ const Edit = () => {
             data.name.trim() !== product.name ||
             data.description.trim() !== product.description ||
             Number(data.price) !== product.price ||
-            data.category !== product.category
+            data.category !== product.category ||
+            JSON.stringify(cleanSpecs(specRows).specs) !== JSON.stringify(product.specs || [])
         );
-    },[product,data,image]);
+    },[product,data,image,specRows]);
+
+    const previewSpecs = useMemo(()=>cleanSpecs(specRows).specs,[specRows]);
 
     const onChangeHandler = (event) => {
         const { name, value } = event.target;
@@ -98,12 +105,19 @@ const Edit = () => {
         event.preventDefault();
         if (saving || !dirty) return;
 
+        const { specs, incomplete } = cleanSpecs(specRows);
+        if (incomplete > 0) {
+            toast.error("Give every specification both a name and a value");
+            return;
+        }
+
         const formData = new FormData();
         formData.append("id",product._id);
         formData.append("name",data.name.trim());
         formData.append("description",data.description.trim());
         formData.append("price",Number(data.price));
         formData.append("category",data.category);
+        formData.append("specs",JSON.stringify(specs));
         if (image) formData.append("image",image);
 
         setSaving(true);
@@ -252,6 +266,10 @@ const Edit = () => {
                         </div>
                     </section>
 
+                    <section className="add-section">
+                        <SpecsEditor rows={specRows} onChange={setSpecRows} category={data.category} />
+                    </section>
+
                     <div className="edit-actions">
                         <button className="btn btn-primary add-btn" type='submit' disabled={saving || !dirty}>
                             {saving && <span className="spinner" aria-hidden="true" />}
@@ -271,6 +289,13 @@ const Edit = () => {
                             <span className="chip">{data.category}</span>
                             <h3 className={data.name ? "" : "is-placeholder"}>{data.name || "Product name"}</h3>
                             <p className={data.description ? "" : "is-placeholder"}>{data.description || "Your description will appear here."}</p>
+                            {previewSpecs.length > 0 &&
+                                <ul className="preview-specs">
+                                    {previewSpecs.slice(0,4).map((spec)=>(
+                                        <li key={spec.label}><span>{spec.label}</span><strong>{spec.value}</strong></li>
+                                    ))}
+                                </ul>
+                            }
                             <strong>{data.price ? formatRand(data.price) : "R 0.00"}</strong>
                         </div>
                     </article>

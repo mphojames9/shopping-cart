@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { ImageIcon, CloseIcon, ChevronDownIcon } from '../../components/Icons';
 import { formatRand } from '../../utils/format';
 import { CATEGORIES } from '../../utils/categories';
+import { cleanSpecs } from '../../utils/specs';
+import SpecsEditor from '../../components/SpecsEditor/SpecsEditor';
 
 const emptyData = {
     name:"",
@@ -19,6 +21,8 @@ const Add = () => {
     const [dragging,setDragging] = useState(false);
     const [loading,setLoading] = useState(false);
     const [data,setData] = useState(emptyData);
+    const [specRows,setSpecRows] = useState([]);
+    const previewSpecs = useMemo(()=>cleanSpecs(specRows).specs,[specRows]);
     const inputRef = useRef(null);
 
     // one object URL per selected file, released when the file changes
@@ -47,11 +51,17 @@ const Add = () => {
         event.preventDefault();
         if (loading) return;
 
+        const { specs, incomplete } = cleanSpecs(specRows);
+        if (incomplete > 0) {
+            toast.error("Give every specification both a name and a value");
+            return;
+        }
         const formData = new FormData();
         formData.append("name",data.name)
         formData.append("description",data.description)
         formData.append("price",Number(data.price))
         formData.append("category",data.category)
+        formData.append("specs",JSON.stringify(specs))
         formData.append("image",image)
 
         setLoading(true);
@@ -59,6 +69,7 @@ const Add = () => {
             const response = await api.post("/api/food/add",formData);
             if (response.data.success) {
                 setData(emptyData)
+                setSpecRows([])
                 setImage(false)
                 if (inputRef.current) inputRef.current.value = "";
                 toast.success(response.data.message)
@@ -156,6 +167,10 @@ const Add = () => {
                     </div>
                 </section>
 
+                <section className="add-section">
+                    <SpecsEditor rows={specRows} onChange={setSpecRows} category={data.category} />
+                </section>
+
                 <button className="btn btn-primary add-btn" type='submit' disabled={loading}>
                     {loading && <span className="spinner" aria-hidden="true" />}
                     {loading ? "Adding..." : "Add product"}
@@ -172,6 +187,13 @@ const Add = () => {
                         <span className="chip">{data.category}</span>
                         <h3 className={data.name ? "" : "is-placeholder"}>{data.name || "Product name"}</h3>
                         <p className={data.description ? "" : "is-placeholder"}>{data.description || "Your description will appear here."}</p>
+                        {previewSpecs.length > 0 &&
+                            <ul className="preview-specs">
+                            {previewSpecs.slice(0,4).map((spec)=>(
+                                <li key={spec.label}><span>{spec.label}</span><strong>{spec.value}</strong></li>
+                            ))}
+                            </ul>
+                        }
                         <strong>{data.price ? formatRand(data.price) : "R 0.00"}</strong>
                     </div>
                 </article>

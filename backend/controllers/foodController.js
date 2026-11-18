@@ -3,6 +3,25 @@ import imageModel from "../models/imageModel.js";
 import fs from 'fs';
 import mongoose from 'mongoose';
 
+// specs arrive as a JSON string (multipart form); keep only complete, sensibly sized rows
+const MAX_SPECS = 12;
+const sanitizeSpecs = (input) => {
+    let list = input;
+    if (typeof input === 'string') {
+        try { list = JSON.parse(input); } catch { return []; }
+    }
+    if (!Array.isArray(list)) return [];
+    const specs = [];
+    for (const row of list) {
+        const label = String(row?.label ?? '').trim().slice(0,40);
+        const value = String(row?.value ?? '').trim().slice(0,80);
+        if (!label || !value) continue;
+        specs.push({label,value});
+        if (specs.length >= MAX_SPECS) break;
+    }
+    return specs;
+}
+
 const addFood = async (req, res) =>{
     try {
         if (!req.file) {
@@ -23,6 +42,7 @@ const addFood = async (req, res) =>{
                 description:req.body.description,
                 price:price,
                 category:req.body.category,
+                specs:sanitizeSpecs(req.body.specs),
                 image:filename
             })
             await food.save();
@@ -99,6 +119,7 @@ const updateFood = async (req, res) => {
             food.description = description;
             food.category = category;
             food.price = price;
+            if (req.body.specs !== undefined) food.specs = sanitizeSpecs(req.body.specs); // older clients that send no specs leave them alone
             if (newImage) food.image = newImage;
             await food.save();
         } catch (error) {
