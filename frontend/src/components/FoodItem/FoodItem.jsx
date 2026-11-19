@@ -3,11 +3,13 @@ import './FoodItem.css';
 import { StoreContext } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/format';
 import { CheckIcon, MinusIcon, PlusIcon } from '../Icons';
+import { openProduct } from '../ProductSheet/ProductSheet';
 
-const FoodItem = ({id,name,price,description,image}) => {
+const FoodItem = ({id,name,price,description,image,specs}) => {
 
     const {cartItems,addToCart,removeFromCart,url} = useContext(StoreContext);
     const qty = cartItems[id] || 0;
+    const specList = Array.isArray(specs) ? specs : [];
 
     // first add also tells the toast to show up
     const addFirst = () => {
@@ -16,14 +18,21 @@ const FoodItem = ({id,name,price,description,image}) => {
     }
 
   return (
-    <article className={`product${qty>0?' in-cart':''}`}>
-        <div className="product-media">
-            <img src={url+"/images/"+image} alt={name} loading="lazy" />
+    <article id={`product-${id}`} className={`product${qty>0?' in-cart':''}`}>
+        <button type="button" className="product-media" onClick={()=>openProduct(id)} aria-label={`View details for ${name}`}>
+            <img src={url+"/images/"+image} alt="" loading="lazy" />
             {qty>0 && <span className="product-incart"><CheckIcon /> In cart</span>}
-        </div>
+        </button>
         <div className="product-info">
             <h3>{name}</h3>
             <p className="product-desc">{description}</p>
+            {specList.length>0 &&
+                <button type="button" className="product-specs" onClick={()=>openProduct(id)} aria-label={`View all ${specList.length} specifications for ${name}`}>
+                    {specList.slice(0,2).map((spec)=><span key={spec.label} className="spec-val" title={`${spec.label}: ${spec.value}`}>{spec.value}</span>)}
+                    {specList.length>2 && <span className="more more-wide">+{specList.length-2}</span>}
+                    {specList.length>1 && <span className="more more-narrow">+{specList.length-1}</span>}
+                </button>
+            }
             <div className="product-buy">
                 <strong className="product-price">{formatPrice(price)}</strong>
                 {qty===0

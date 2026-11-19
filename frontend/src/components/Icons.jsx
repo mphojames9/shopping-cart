@@ -86,3 +86,19 @@ export const ShieldIcon = icon(
     <path d="m9 12 2.2 2.2L15.5 10" />
   </>
 );
+
+export const MicIcon = icon(
+  <>
+    <rect x="9" y="3" width="6" height="11" rx="3" />
+    <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+  </>
+);
+
+export const SparklesIcon = icon(
+  <>
+    <path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z" />
+    <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" />
+  </>
+);
+
+export const EnterIcon = icon(<path d="M20 5v6a3 3 0 0 1-3 3H5m0 0 4-4m-4 4 4 4" />);

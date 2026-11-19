@@ -1,53 +1,142 @@
-import React from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import './Header.css';
-import { menu_list } from '../../assets/assets';
-import { DELIVERY_FEE } from '../../context/StoreContext';
+import { StoreContext, DELIVERY_FEE } from '../../context/StoreContext';
 import { categoryLabel, formatPrice } from '../../utils/format';
-import { ArrowRightIcon, ClockIcon, ShieldIcon, TruckIcon } from '../Icons';
+import { buildCategoryWords, buildSuggestions } from '../../utils/smartSearch';
+import { ArrowRightIcon, CheckIcon, ClockIcon, PlusIcon, SearchIcon, ShieldIcon, SparklesIcon, TruckIcon } from '../Icons';
+import { modifierKey, openSpotlight } from '../Spotlight/Spotlight';
+import { openProduct } from '../ProductSheet/ProductSheet';
 
-// categories shown as shortcuts in the hero
-const FEATURED = ['Phones','Laptops','Smart TV','Taplets'];
+// words that rotate in the headline
+const WORDS = ['phones', 'laptops', 'TVs', 'tablets', 'gaming'];
+// how the showcase cards sit on desktop: rotation (deg) and parallax depth (px)
+const POSES = [
+  { r: 3, depth: 16 },
+  { r: -5, depth: 28 },
+  { r: 6, depth: 22 },
+  { r: -4, depth: 30 },
+];
 
-const Header = ({setCategory}) => {
+const Header = () => {
 
-  const tiles = FEATURED.map((name)=>menu_list.find((item)=>item.menu_name===name)).filter(Boolean);
-  // two columns, the second one sits lower so the tiles read as a bento
-  const columns = [tiles.filter((_,i)=>i%2===0), tiles.filter((_,i)=>i%2===1)];
+  const { food_list, ready, cartItems, addToCart, url } = useContext(StoreContext);
+  const heroRef = useRef(null);
 
-  const shop = (category) => {
-    setCategory(category);
-    document.getElementById('food-display')?.scrollIntoView({behavior:'smooth'});
-  }
+  // one product per category, so the showcase has variety (the list is shuffled on every page load)
+  const featured = useMemo(() => {
+    const seen = new Set();
+    const picks = [];
+    for (const product of food_list) {
+      if (!product.image || seen.has(product.category)) continue;
+      seen.add(product.category);
+      picks.push(product);
+      if (picks.length === 4) break;
+    }
+    return picks;
+  }, [food_list]);
+
+  const ideas = useMemo(() => {
+    const words = buildCategoryWords(food_list);
+    return buildSuggestions(food_list, words, 4);
+  }, [food_list]);
+
+  // desktop only: the cards drift a little with the pointer
+  const onPointerMove = (event) => {
+    if (event.pointerType !== 'mouse' || !heroRef.current) return;
+    const box = heroRef.current.getBoundingClientRect();
+    heroRef.current.style.setProperty('--px', (((event.clientX - box.left) / box.width - 0.5) * 2).toFixed(3));
+    heroRef.current.style.setProperty('--py', (((event.clientY - box.top) / box.height - 0.5) * 2).toFixed(3));
+  };
+  const onPointerLeave = () => {
+    heroRef.current?.style.setProperty('--px', '0');
+    heroRef.current?.style.setProperty('--py', '0');
+  };
+
+  const quickAdd = (product) => {
+    addToCart(product._id);
+    window.dispatchEvent(new CustomEvent('cart:added', { detail: { name: product.name } }));
+  };
 
   return (
-    <section className='hero-wrap'>
-      <div className="hero">
+    <section className="hero-wrap">
+      <div className="hero" ref={heroRef} onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>
+
+        <div className="hero-aurora" aria-hidden="true"><i /><i /><i /></div>
+
         <div className="hero-copy">
-          <h1>Your one stop for phones, laptops and TVs</h1>
-          <p>Monitors, tablets, accessories and gaming gear too, delivered to your door.</p>
-          <button type="button" className="hero-cta" onClick={()=>shop('All')}>
-            Shop all products <ArrowRightIcon />
+          <button type="button" className="hero-badge" onClick={() => openSpotlight()}>
+            <SparklesIcon />
+            <span>New: search in plain English</span>
+            <ArrowRightIcon />
           </button>
-        </div>
-        <div className="hero-tiles">
-          {columns.map((column,c)=>(
-            <ul key={c}>
-              {column.map((tile)=>{
-                const index = tiles.indexOf(tile);
-                return (
-                  <li key={tile.menu_name} style={{'--i':index}}>
-                    <button type="button" onClick={()=>shop(tile.menu_name)}>
-                      <img src={tile.menu_image} alt="" />
-                      <span>{categoryLabel(tile.menu_name)}</span>
-                      <i aria-hidden="true"><ArrowRightIcon /></i>
-                    </button>
-                  </li>
-                );
-              })}
+
+          <h1>
+            Your one stop for
+            <span className="rotor" aria-hidden="true">
+              <span className="rotor-track">
+                {[...WORDS, WORDS[0]].map((word, i) => <b key={i}>{word}</b>)}
+              </span>
+            </span>
+            <span className="hero-sr">tech</span>
+          </h1>
+
+          <p>Phones, laptops, TVs and more, delivered to your door for a flat {formatPrice(DELIVERY_FEE)}.</p>
+
+          <button type="button" className="hero-search" onClick={() => openSpotlight()} aria-label="Search products">
+            <SearchIcon />
+            <span>Search or ask for anything…</span>
+            <kbd>{modifierKey()} K</kbd>
+          </button>
+
+          {ideas.length > 0 &&
+            <ul className="hero-try" aria-label="Try asking">
+              {ideas.map((idea) => (
+                <li key={idea}>
+                  <button type="button" onClick={() => openSpotlight(idea)}>{idea}</button>
+                </li>
+              ))}
             </ul>
-          ))}
+          }
         </div>
+
+        {(!ready || featured.length > 0) &&
+          <ul className="hero-deck" aria-label="Featured products">
+            {!ready && POSES.map((pose, i) => (
+              <li key={i} className="deck-card is-skeleton" style={{ '--i': i, '--r': `${pose.r}deg`, '--depth': pose.depth }} aria-hidden="true">
+                <span className="deck-media" />
+                <span className="deck-line" />
+                <span className="deck-line short" />
+              </li>
+            ))}
+
+            {ready && featured.map((product, i) => {
+              const pose = POSES[i];
+              const inCart = (cartItems[product._id] || 0) > 0;
+              const spec = product.specs?.[0]?.value;
+              return (
+                <li key={product._id} className="deck-card" style={{ '--i': i, '--r': `${pose.r}deg`, '--depth': pose.depth }}>
+                  <div className="deck-float">
+                    <button type="button" className="deck-open" onClick={() => openProduct(product._id)} aria-label={`View ${product.name}`}>
+                      <span className="deck-media">
+                        <img src={url + '/images/' + product.image} alt="" loading={i === 0 ? 'eager' : 'lazy'} />
+                      </span>
+                      <span className="deck-cat">{categoryLabel(product.category)}{spec ? ` · ${spec}` : ''}</span>
+                      <strong className="deck-name">{product.name}</strong>
+                    </button>
+                    <div className="deck-foot">
+                      <b>{formatPrice(product.price)}</b>
+                      <button type="button" className={`deck-add${inCart ? ' is-in' : ''}`} onClick={() => quickAdd(product)} aria-label={`Add ${product.name} to cart`}>
+                        {inCart ? <CheckIcon /> : <PlusIcon />}
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        }
       </div>
+
       <ul className="trust">
         <li><span><TruckIcon /></span>Flat {formatPrice(DELIVERY_FEE)} delivery</li>
         <li><span><ClockIcon /></span>Delivered within 7 working days</li>

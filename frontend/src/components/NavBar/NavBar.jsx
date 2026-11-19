@@ -4,6 +4,7 @@ import { assets } from '../../assets/assets';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { CartIcon, ChevronIcon, GridIcon, HomeIcon, PackageIcon, SearchIcon, UserIcon } from '../Icons';
+import { modifierKey, openSpotlight } from '../Spotlight/Spotlight';
 
 const HOME = '/shopping-cart';
 const CART = '/shopping-cart/cart';
@@ -90,9 +91,12 @@ const NavBar = ({setShowLogin}) => {
           </nav>
 
           <div className="navbar-actions">
-            <a href="#product-search" className="icon-btn" aria-label="Search products" onClick={goTo('food-display','product-search')}>
+            <button type="button" className="search-pill" aria-label="Search products" aria-keyshortcuts="Control+K Meta+K" onClick={()=>openSpotlight()}>
+              <SearchIcon /><span>Search products</span><kbd>{modifierKey()} K</kbd>
+            </button>
+            <button type="button" className="icon-btn search-icon-btn" aria-label="Search products" onClick={()=>openSpotlight()}>
               <SearchIcon />
-            </a>
+            </button>
             <Link to={CART} className="icon-btn icon-btn-cart" aria-label={`Cart, ${cartCount} ${cartCount===1?'item':'items'}`}>
               <CartIcon />
               {badge}
