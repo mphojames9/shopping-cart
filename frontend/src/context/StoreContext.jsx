@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios"
+import { shuffle } from "../utils/shuffle";
 
 export const StoreContext = createContext(null)
 
@@ -68,7 +69,8 @@ const StoreContextProvider = (props) => {
     const fetchFoodList = async () => {
         try {
             const response = await axios.get(url+"/api/food/list");
-            setFoodList(response.data.data)
+            // a fresh random order on every page load (stays stable while browsing)
+            setFoodList(shuffle(response.data.data))
         } catch (error) {
             console.log(error);
         }

@@ -328,6 +328,56 @@ button{
     to{ transform: rotate(360deg); }
 }
 
+/* ---------- phones: a denser, calmer scale ---------- */
+@media (max-width: 640px){
+    :root{
+        --gutter: 14px;
+        --nav-h: 50px;
+        --tabbar-h: 52px;
+        --radius: 14px;
+        --radius-lg: 20px;
+    }
+
+    /* every rem on the site shrinks with this: 1rem = 14px instead of 16px */
+    html{
+        font-size: 14px;
+    }
+
+    .btn{
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 12px;
+        font-size: .95rem;
+    }
+
+    .btn-sm{
+        min-height: 34px;
+        padding: 0 13px;
+        border-radius: 10px;
+        font-size: .88rem;
+    }
+
+    .stepper button{
+        width: 30px;
+        height: 30px;
+    }
+
+    .stepper button svg{
+        width: 15px;
+        height: 15px;
+    }
+
+    .stepper span{
+        min-width: 24px;
+        font-size: .92rem;
+    }
+
+    .field input{
+        height: 44px;
+        border-radius: 12px;
+    }
+}
+
 @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior: auto; }
     *, *::before, *::after{

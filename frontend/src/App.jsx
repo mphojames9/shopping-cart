@@ -9,6 +9,8 @@ import MyOrders from './pages/MyOrders/MyOrders';
 import Footer from './components/Footer/Footer';
 import LoginPopup from './components/LoginPopup/LoginPopup';
 import Toast from './components/Toast/Toast';
+import Spotlight from './components/Spotlight/Spotlight';
+import ProductSheet from './components/ProductSheet/ProductSheet';
 
 const App = () => {
 
@@ -35,6 +37,8 @@ const App = () => {
       </main>
       <Footer />
       <Toast />
+      <ProductSheet />
+      <Spotlight />
     </>
   );
 }

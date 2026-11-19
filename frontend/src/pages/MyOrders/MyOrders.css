@@ -15,6 +15,10 @@
     font-weight: 800;
 }
 
+@media (max-width: 640px){
+    .orders h1{ font-size: 1.5rem; }
+}
+
 .orders-message{
     display: flex;
     flex-direction: column;
