@@ -244,30 +244,66 @@
 
 @media (max-width: 640px){
     .product{
-        border-radius: 20px;
+        border-radius: 16px;
+    }
+
+    .product-media{
+        margin: 5px 5px 0;
+        padding: 6% 8%;
+        aspect-ratio: 5 / 4;
+        border-radius: 12px;
+    }
+
+    .product-incart{
+        top: 7px;
+        left: 7px;
+        padding: 3px 8px 3px 6px;
+        font-size: .66rem;
+    }
+
+    .product-incart svg{
+        width: 11px;
+        height: 11px;
     }
 
     .product-info{
-        padding: 12px 10px 10px;
+        gap: 4px;
+        padding: 9px 9px 9px;
     }
 
     .product-info h3{
-        font-size: .95rem;
+        font-size: .88rem;
     }
 
     .product-desc{
         display: none;
     }
 
+    .product-specs span{
+        padding: 2px 8px;
+        font-size: .68rem;
+    }
+
+    .product-buy{
+        padding-top: 6px;
+    }
+
     .product-price{
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     /* round "+" button so price and action fit in a two column grid */
     .add-btn{
-        width: 42px;
+        width: 32px;
+        height: 32px;
         padding: 0;
         justify-content: center;
+        box-shadow: 0 4px 10px rgba(10, 106, 161, .28);
+    }
+
+    .add-btn svg{
+        width: 16px;
+        height: 16px;
     }
 
     .add-btn span{
@@ -275,11 +311,12 @@
     }
 
     .product .stepper button{
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
     }
 
     .product .stepper span{
-        min-width: 22px;
+        min-width: 20px;
+        font-size: .85rem;
     }
 }

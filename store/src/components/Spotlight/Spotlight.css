@@ -531,7 +531,16 @@ kbd svg{ width: 12px; height: 12px; stroke-width: 2.4; }
     .sp-input{
         padding: calc(8px + env(safe-area-inset-top, 0px)) 8px 8px 16px;
     }
-    .sp-field{ height: 48px; }
+    .sp-field{ height: 42px; }
+    .sp-field input{ font-size: 16px; }
+    .sp-ph{ font-size: 15px; }
+    .sp-iconbtn{ width: 36px; height: 36px; }
+    .sp-iconbtn svg{ width: 18px; height: 18px; }
+    .sp-chip{ height: 28px; font-size: .8rem; }
+    .sp-thumb{ width: 42px !important; height: 42px !important; }
+    .sp-add{ height: 34px; }
+    .sp-stepper button{ width: 28px; height: 28px; }
+    .sp-cart{ height: 40px !important; }
     .sp-esc kbd{ display: none; }
     .sp-esc span{
         display: inline;

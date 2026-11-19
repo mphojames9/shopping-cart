@@ -1,0 +1,391 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&display=swap');
+
+:root{
+    /* colour */
+    --ink: #0a1f33;
+    --ink-soft: #17314c;
+    --muted: #5b6d80;
+    --line: #e2e8ef;
+    --panel: #eef3f8;
+    --surface: var(--panel);
+    --canvas: #f5f8fb;
+    --paper: #ffffff;
+    --brand: #2aa1d9;          /* the blue in the One Stop logo */
+    --brand-strong: #0a6aa1;   /* buttons and text on white (AA contrast) */
+    --brand-deep: #08507a;
+    --mint: #34d3a5;
+    --success: #0f8a4b;
+    --warn: #8a5a00;
+    --danger: #b3261e;
+
+    /* shape + depth */
+    --radius: 18px;
+    --radius-lg: 26px;
+    --shadow-sm: 0 1px 2px rgba(10,31,51,.05), 0 2px 8px rgba(10,31,51,.04);
+    --shadow-md: 0 2px 4px rgba(10,31,51,.04), 0 14px 34px rgba(10,31,51,.10);
+    --shadow-lg: 0 30px 70px rgba(10,31,51,.22);
+
+    /* motion */
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --spring: cubic-bezier(.34, 1.56, .64, 1);
+
+    /* layout */
+    --gutter: 16px;
+    --nav-h: 58px;
+    --tabbar-h: 64px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+    --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
+
+@media (min-width: 761px){
+    :root{ --nav-h: 68px; }
+}
+
+@media (min-width: 768px){
+    :root{ --gutter: 32px; }
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html{
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-h) + 84px);
+    -webkit-text-size-adjust: 100%;
+}
+
+body{
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--canvas);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3{
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+img{
+    display: block;
+    max-width: 100%;
+}
+
+button, input, select, textarea{
+    font: inherit;
+    color: inherit;
+}
+
+button{
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+:focus-visible{
+    outline: 3px solid rgba(42, 161, 217, .55);
+    outline-offset: 2px;
+}
+
+#root{
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: clip;
+}
+
+.app{
+    width: min(1240px, calc(100% - var(--gutter) * 2));
+    margin: 0 auto;
+    padding-bottom: 96px;
+    flex: 1;
+}
+
+.page{
+    animation: pageIn 450ms ease both;
+}
+
+@media (max-width: 760px){
+    .app{
+        padding-bottom: calc(var(--tabbar-h) + 56px + var(--safe-bottom));
+    }
+}
+
+/* ---------- buttons ---------- */
+.btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 50px;
+    padding: 0 24px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    transition: background-color 200ms, border-color 200ms, transform 200ms var(--spring), box-shadow 200ms;
+}
+
+.btn:active{
+    transform: scale(.97);
+}
+
+.btn-primary{
+    background: var(--ink);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(10,31,51,.22);
+}
+
+.btn-primary:hover{
+    background: var(--ink-soft);
+}
+
+.btn-brand{
+    background: var(--brand-strong);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(10,106,161,.3);
+}
+
+.btn-brand:hover{
+    background: var(--brand-deep);
+}
+
+.btn-ghost{
+    background: var(--paper);
+    border-color: var(--line);
+}
+
+.btn-ghost:hover{
+    border-color: var(--ink);
+}
+
+.btn-sm{
+    min-height: 42px;
+    padding: 0 18px;
+    font-size: .95rem;
+    border-radius: 12px;
+}
+
+.btn-block{
+    width: 100%;
+}
+
+.btn:disabled{
+    opacity: .6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.link-btn{
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: 700;
+    color: var(--brand-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* quantity control */
+.stepper{
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    justify-self: start;
+}
+
+.stepper button{
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    transition: background-color 150ms, transform 200ms var(--spring);
+}
+
+.stepper button svg{
+    width: 18px;
+    height: 18px;
+}
+
+.stepper button:hover{
+    background: var(--panel);
+}
+
+.stepper button:active{
+    transform: scale(.88);
+}
+
+.stepper span{
+    min-width: 30px;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+/* form fields */
+.field{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.field > span{
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.field input{
+    height: 52px;
+    padding: 0 16px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--paper);
+    font-size: 16px; /* 16px stops iOS from zooming into the field */
+    width: 100%;
+    transition: border-color 200ms, box-shadow 200ms;
+}
+
+.field input:hover{
+    border-color: #c9d4df;
+}
+
+.field input:focus{
+    outline: none;
+    border-color: var(--brand-strong);
+    box-shadow: 0 0 0 4px rgba(42, 161, 217, .2);
+}
+
+/* scroll reveal (toggled by an IntersectionObserver) */
+.reveal{
+    opacity: 0;
+    transform: translateY(22px) scale(.98);
+    transition: opacity 650ms var(--ease), transform 650ms var(--ease);
+    transition-delay: var(--d, 0ms);
+}
+
+.reveal.in{
+    opacity: 1;
+    transform: none;
+}
+
+/* ---------- keyframes ---------- */
+@keyframes pageIn{
+    from{ opacity: 0; }
+    to{ opacity: 1; }
+}
+
+@keyframes rise{
+    from{ opacity: 0; transform: translateY(26px); }
+    to{ opacity: 1; transform: none; }
+}
+
+@keyframes scaleIn{
+    from{ opacity: 0; transform: scale(.94) translateY(-6px); }
+    to{ opacity: 1; transform: none; }
+}
+
+@keyframes popIn{
+    0%{ opacity: 0; transform: scale(.6); }
+    60%{ opacity: 1; transform: scale(1.08); }
+    100%{ transform: scale(1); }
+}
+
+@keyframes badgePop{
+    0%{ transform: scale(.4); }
+    60%{ transform: scale(1.3); }
+    100%{ transform: scale(1); }
+}
+
+@keyframes shimmer{
+    to{ background-position: -200% 0; }
+}
+
+@keyframes spin{
+    to{ transform: rotate(360deg); }
+}
+
+/* ---------- phones: a denser, calmer scale ---------- */
+@media (max-width: 640px){
+    :root{
+        --gutter: 14px;
+        --nav-h: 50px;
+        --tabbar-h: 52px;
+        --radius: 14px;
+        --radius-lg: 20px;
+    }
+
+    /* every rem on the site shrinks with this: 1rem = 14px instead of 16px */
+    html{
+        font-size: 14px;
+    }
+
+    .btn{
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 12px;
+        font-size: .95rem;
+    }
+
+    .btn-sm{
+        min-height: 34px;
+        padding: 0 13px;
+        border-radius: 10px;
+        font-size: .88rem;
+    }
+
+    .stepper button{
+        width: 30px;
+        height: 30px;
+    }
+
+    .stepper button svg{
+        width: 15px;
+        height: 15px;
+    }
+
+    .stepper span{
+        min-width: 24px;
+        font-size: .92rem;
+    }
+
+    .field input{
+        height: 44px;
+        border-radius: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{
+        animation: none !important;
+        transition: none !important;
+    }
+    .reveal{
+        opacity: 1;
+        transform: none;
+    }
+}
