@@ -3,12 +3,10 @@ import './Header.css';
 import { StoreContext, DELIVERY_FEE } from '../../context/StoreContext';
 import { categoryLabel, formatPrice } from '../../utils/format';
 import { buildCategoryWords, buildSuggestions } from '../../utils/smartSearch';
-import { ArrowRightIcon, CheckIcon, ClockIcon, PlusIcon, SearchIcon, ShieldIcon, SparklesIcon, TruckIcon } from '../Icons';
+import { CheckIcon, ClockIcon, PlusIcon, SearchIcon, ShieldIcon, TruckIcon } from '../Icons';
 import { modifierKey, openSpotlight } from '../Spotlight/Spotlight';
 import { openProduct } from '../ProductSheet/ProductSheet';
 
-// words that rotate in the headline
-const WORDS = ['phones', 'laptops', 'TVs', 'tablets', 'gaming'];
 // how the showcase cards sit on desktop: rotation (deg) and parallax depth (px)
 const POSES = [
   { r: 3, depth: 16 },
@@ -61,24 +59,8 @@ const Header = () => {
     <section className="hero-wrap">
       <div className="hero" ref={heroRef} onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>
 
-        <div className="hero-aurora" aria-hidden="true"><i /><i /><i /></div>
-
         <div className="hero-copy">
-          <button type="button" className="hero-badge" onClick={() => openSpotlight()}>
-            <SparklesIcon />
-            <span>New: search in plain English</span>
-            <ArrowRightIcon />
-          </button>
-
-          <h1>
-            Your one stop for
-            <span className="rotor" aria-hidden="true">
-              <span className="rotor-track">
-                {[...WORDS, WORDS[0]].map((word, i) => <b key={i}>{word}</b>)}
-              </span>
-            </span>
-            <span className="hero-sr">tech</span>
-          </h1>
+          <h1>Your one stop for <span>tech</span></h1>
 
           <p>Phones, laptops, TVs and more, delivered to your door for a flat {formatPrice(DELIVERY_FEE)}.</p>
 

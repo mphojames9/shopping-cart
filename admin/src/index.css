@@ -153,8 +153,8 @@ button:disabled{cursor:not-allowed}
 
 .btn-primary{
   color:#fff;
-  background:linear-gradient(180deg,#0A81BA 0%,#09699A 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 10px 20px -10px rgba(10,125,181,.8);
+  background:#0A7DB5;
+  box-shadow:0 8px 16px -10px rgba(10,125,181,.7);
 }
 .btn-ghost{
   background:var(--surface);
@@ -168,7 +168,7 @@ button:disabled{cursor:not-allowed}
 }
 
 @media (hover:hover){
-  .btn-primary:hover:not(:disabled){filter:brightness(1.07);transform:translateY(-1px)}
+  .btn-primary:hover:not(:disabled){background:#086594;transform:translateY(-1px)}
   .btn-ghost:hover:not(:disabled){background:var(--bg)}
   .btn-danger:hover:not(:disabled){filter:brightness(1.06)}
 }
@@ -287,15 +287,8 @@ select.control{appearance:none;-webkit-appearance:none;padding-right:44px;cursor
   background:#E8EEF5;
   border-radius:10px;
 }
-.skeleton::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  transform:translateX(-100%);
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
-  animation:shimmer 1.4s infinite;
-}
-@keyframes shimmer{to{transform:translateX(100%)}}
+.skeleton{animation:skeletonPulse 1.2s ease-in-out infinite alternate}
+@keyframes skeletonPulse{from{opacity:.55}to{opacity:1}}
 
 /* empty states */
 .empty{

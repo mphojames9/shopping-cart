@@ -146,13 +146,6 @@ export const RevenueChart = ({ current, previous, days, showPrevious }) => {
             role="img"
             aria-label={`Daily revenue for the last ${days} days, ${formatRandWhole(total)} in total`}
           >
-            <defs>
-              <linearGradient id="revFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" style={{ stopColor: 'var(--brand-500)', stopOpacity: 0.3 }} />
-                <stop offset="1" style={{ stopColor: 'var(--brand-500)', stopOpacity: 0 }} />
-              </linearGradient>
-            </defs>
-
             {geo.ticks.map((tick) => (
               <g key={tick.value}>
                 <line className="grid-line" x1={padL} x2={width - padR} y1={tick.y} y2={tick.y} />
@@ -175,7 +168,7 @@ export const RevenueChart = ({ current, previous, days, showPrevious }) => {
             {showPrevious && <path className="chart-prev" d={geo.previousLine} />}
 
             <g key={days}>
-              <path className="chart-area" d={geo.area} fill="url(#revFill)" />
+              <path className="chart-area" d={geo.area} />
               <path className="chart-line" d={geo.line} pathLength="1" />
             </g>
 

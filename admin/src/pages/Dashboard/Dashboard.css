@@ -295,7 +295,11 @@
     stroke-dashoffset: 1;
     animation: draw 1.2s var(--ease-out) .1s forwards;
 }
-.chart-area{ animation: areaIn 1s var(--ease-out) .3s backwards; }
+.chart-area{
+    fill: var(--brand-500);
+    fill-opacity: .1;
+    animation: areaIn 1s var(--ease-out) .3s backwards;
+}
 .chart-prev{
     fill: none;
     stroke: var(--ink-3);
@@ -492,7 +496,7 @@ a.ts-row:focus-visible{ outline-offset: -2px; }
     width: var(--w);
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--brand-500), var(--brand-300));
+    background: var(--brand-500);
     transform-origin: left;
     animation: barGrow .9s var(--ease-out) backwards;
     animation-delay: calc(var(--i, 0) * 80ms + .3s);

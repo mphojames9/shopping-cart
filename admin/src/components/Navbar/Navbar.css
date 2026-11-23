@@ -46,8 +46,7 @@
     height: 36px;
     border-radius: 50%;
     color: #fff;
-    background: linear-gradient(145deg, #2AA7E1, #0A6FA3);
-    box-shadow: 0 6px 14px -6px rgba(10,125,181,.8);
+    background: #1E9BD7;
 }
 
 .logout-btn{

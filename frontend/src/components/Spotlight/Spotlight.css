@@ -276,7 +276,7 @@ kbd svg{ width: 12px; height: 12px; stroke-width: 2.4; }
     padding: 5px;
     overflow: hidden;
     border-radius: 14px;
-    background: linear-gradient(160deg, #f4f8fb, #e1ebf3);
+    background: #eef3f8;
 }
 .sp-thumb img{
     width: 100%;

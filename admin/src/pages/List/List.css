@@ -52,6 +52,13 @@
     object-fit: cover;
 }
 
+.list-main{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
 .list-name{
     font-weight: 600;
     overflow-wrap: anywhere;
@@ -65,7 +72,6 @@
     color: var(--ink-3);
     font-size: .8rem;
     font-weight: 600;
-    white-space: nowrap;
 }
 
 .list-price{
@@ -121,7 +127,7 @@
     }
     .list-row > .thumb,
     .list-row > .skel-thumb{ grid-area: thumb; width: 72px; height: 72px; align-self: center; }
-    .list-row > .list-name{ grid-area: name; align-self: end; }
+    .list-row > .list-main{ grid-area: name; align-self: end; }
     .list-row > .list-actions{ grid-area: act; align-self: center; }
 
     .list-meta{

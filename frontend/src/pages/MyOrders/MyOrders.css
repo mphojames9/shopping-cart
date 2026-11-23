@@ -72,9 +72,8 @@
 .order-skeleton{
     height: 88px;
     border-radius: 22px;
-    background: linear-gradient(90deg, var(--panel) 0%, #f8fafc 50%, var(--panel) 100%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s linear infinite;
+    background: var(--panel);
+    animation: skelPulse 1.2s ease-in-out infinite alternate;
 }
 
 .order-meta{
