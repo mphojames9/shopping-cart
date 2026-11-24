@@ -3,17 +3,19 @@ import './Cart.css';
 import { StoreContext, DELIVERY_FEE } from '../../context/StoreContext';
 import { Link, useNavigate } from 'react-router-dom';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
+import PromoCode from '../../components/PromoCode/PromoCode';
 import { formatPrice } from '../../utils/format';
 import { CartIcon, MinusIcon, PlusIcon } from '../../components/Icons';
 
 const Cart = ({setShowLogin}) => {
 
-  const { cartItems, food_list, addToCart, removeFromCart, getTotalCartAmount, url, token, ready } = useContext(StoreContext)
+  const { cartItems, food_list, addToCart, removeFromCart, getTotalCartAmount, getDiscount, url, token, ready } = useContext(StoreContext)
 
   const navigate = useNavigate();
 
   const items = food_list.filter((item) => cartItems[item._id] > 0);
   const subtotal = getTotalCartAmount();
+  const discount = getDiscount();
   const count = items.reduce((sum, item) => sum + cartItems[item._id], 0);
 
   const checkout = () => {
@@ -65,7 +67,7 @@ const Cart = ({setShowLogin}) => {
             </li>
           ))}
         </ul>
-        <OrderSummary note="You will pay by card on Stripe's secure page.">
+        <OrderSummary beforeTotals={<PromoCode setShowLogin={setShowLogin} />} note="You will pay by card on Stripe's secure page.">
           <button type="button" className="btn btn-primary btn-block cart-checkout" onClick={checkout}>
             {token ? 'Checkout' : 'Sign in to checkout'}
           </button>
@@ -76,7 +78,7 @@ const Cart = ({setShowLogin}) => {
       <div className="cart-bar">
         <div>
           <small>Total incl. delivery</small>
-          <strong>{formatPrice(subtotal + DELIVERY_FEE)}</strong>
+          <strong>{formatPrice(subtotal - discount + DELIVERY_FEE)}</strong>
         </div>
         <button type="button" className="btn btn-primary" onClick={checkout}>
           {token ? 'Checkout' : 'Sign in'}

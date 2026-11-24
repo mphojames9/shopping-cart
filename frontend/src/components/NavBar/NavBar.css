@@ -150,6 +150,19 @@
     animation: badgePop 450ms var(--spring);
 }
 
+/* wishlist heart: lights up on its own page, its badge is a different colour from the cart's */
+.icon-btn-wishlist.active{
+    color: #d92d4a;
+}
+
+.icon-btn-wishlist.active svg{
+    fill: currentColor;
+}
+
+.wishlist-badge{
+    background: #d92d4a;
+}
+
 /* account dropdown */
 .account{
     position: relative;

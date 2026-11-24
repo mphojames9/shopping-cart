@@ -1,5 +1,6 @@
 import foodModel from "../models/foodModel.js";
 import imageModel from "../models/imageModel.js";
+import userModel from "../models/userModel.js";
 import fs from 'fs';
 import mongoose from 'mongoose';
 
@@ -78,6 +79,8 @@ const removeFood = async (req,res) => {
         fs.unlink(`uploads/${food.image}`,()=>{}) // old images that shipped inside the repo
 
         await foodModel.findByIdAndDelete(req.body.id);
+        // nobody's wishlist should keep pointing at a product that no longer exists
+        await userModel.updateMany({wishlist:String(food._id)},{$pull:{wishlist:String(food._id)}}).catch(()=>{});
         res.json({success:true,message:"Product Removed"})
     } catch (error) {
         console.log(error);

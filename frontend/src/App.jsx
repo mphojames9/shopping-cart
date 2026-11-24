@@ -6,6 +6,7 @@ import Home from './pages/Home/Home';
 import Cart from './pages/Cart/Cart';
 import Verify from './pages/Verify/Verify';
 import MyOrders from './pages/MyOrders/MyOrders';
+import Wishlist from './pages/Wishlist/Wishlist';
 import Footer from './components/Footer/Footer';
 import LoginPopup from './components/LoginPopup/LoginPopup';
 import Toast from './components/Toast/Toast';
@@ -33,6 +34,7 @@ const App = () => {
           <Route path='/shopping-cart/placeOder' element={<PlaceOder />} />
           <Route path='/shopping-cart/verify' element={<Verify />} />
           <Route path='/shopping-cart/myorders' element={<MyOrders setShowLogin={setShowLogin} />} />
+          <Route path='/shopping-cart/wishlist' element={<Wishlist setShowLogin={setShowLogin} />} />
         </Routes>
       </main>
       <Footer />

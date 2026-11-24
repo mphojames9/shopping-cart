@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { categoryLabel, formatPrice } from '../../utils/format';
 import { ArrowRightIcon, CartIcon, CloseIcon, MinusIcon, PlusIcon } from '../Icons';
+import WishlistButton from '../WishlistButton/WishlistButton';
 
 const CART = '/shopping-cart/cart';
 
@@ -100,6 +101,7 @@ const ProductSheet = () => {
         <button type="button" className="ps-close" aria-label="Close details" onClick={() => hide()}><CloseIcon /></button>
 
         <div className="ps-media">
+          <WishlistButton id={product._id} name={product.name} className="heart-sheet" />
           <img src={url + '/images/' + product.image} alt={product.name} />
         </div>
 

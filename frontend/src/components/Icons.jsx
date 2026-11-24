@@ -102,3 +102,15 @@ export const SparklesIcon = icon(
 );
 
 export const EnterIcon = icon(<path d="M20 5v6a3 3 0 0 1-3 3H5m0 0 4-4m-4 4 4 4" />);
+
+// outline by default; WishlistButton fills it with CSS when the product is saved
+export const HeartIcon = icon(
+  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+);
+
+export const TagIcon = icon(
+  <>
+    <path d="M3 3h8l9.5 9.5a2 2 0 0 1 0 2.8l-5.2 5.2a2 2 0 0 1-2.8 0L3 11z" />
+    <circle cx="7.5" cy="7.5" r="1.5" />
+  </>
+);

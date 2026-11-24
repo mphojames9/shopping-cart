@@ -58,6 +58,15 @@
     font-variant-numeric: tabular-nums;
 }
 
+.summary-lines .summary-discount{
+    color: var(--success);
+    font-weight: 600;
+}
+
+.summary-discount dt span{
+    letter-spacing: .04em;
+}
+
 .summary-lines .summary-total{
     margin-top: 6px;
     padding-top: 16px;

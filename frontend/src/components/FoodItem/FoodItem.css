@@ -1,4 +1,5 @@
 .product{
+    position: relative; /* the heart button sits over the photo */
     container-type: inline-size;
     display: flex;
     flex-direction: column;

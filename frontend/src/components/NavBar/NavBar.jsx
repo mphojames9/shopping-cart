@@ -3,16 +3,17 @@ import './NavBar.css';
 import { assets } from '../../assets/assets';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
-import { CartIcon, ChevronIcon, GridIcon, HomeIcon, PackageIcon, SearchIcon, UserIcon } from '../Icons';
+import { CartIcon, ChevronIcon, GridIcon, HeartIcon, HomeIcon, PackageIcon, SearchIcon, UserIcon } from '../Icons';
 import { modifierKey, openSpotlight } from '../Spotlight/Spotlight';
 
 const HOME = '/shopping-cart';
 const CART = '/shopping-cart/cart';
 const ORDERS = '/shopping-cart/myorders';
+const WISHLIST = '/shopping-cart/wishlist';
 
 const NavBar = ({setShowLogin}) => {
 
-  const {cartItems,token,logout} = useContext(StoreContext);
+  const {cartItems,token,logout,wishlist} = useContext(StoreContext);
   const navigate = useNavigate();
   const location = useLocation();
   const accountRef = useRef(null);
@@ -23,6 +24,7 @@ const NavBar = ({setShowLogin}) => {
   const onHome = path === HOME;
   const onCart = path === CART;
   const onOrders = path === ORDERS;
+  const onWishlist = path === WISHLIST;
 
   // scroll to a section of the home page (going there first when we are on another page)
   const goTo = (sectionId,focusId) => (event) => {
@@ -77,6 +79,7 @@ const NavBar = ({setShowLogin}) => {
   },[]);
 
   const badge = cartCount>0 && <span key={cartCount} className="cart-badge">{cartCount}</span>;
+  const savedCount = wishlist.length;
 
   return (
     <>
@@ -97,6 +100,10 @@ const NavBar = ({setShowLogin}) => {
             <button type="button" className="icon-btn search-icon-btn" aria-label="Search products" onClick={()=>openSpotlight()}>
               <SearchIcon />
             </button>
+            <Link to={WISHLIST} className={`icon-btn icon-btn-wishlist${onWishlist?' active':''}`} aria-current={onWishlist?'page':undefined} aria-label={`Wishlist, ${savedCount} ${savedCount===1?'item':'items'}`}>
+              <HeartIcon />
+              {savedCount>0 && <span key={savedCount} className="cart-badge wishlist-badge">{savedCount}</span>}
+            </Link>
             <Link to={CART} className="icon-btn icon-btn-cart" aria-label={`Cart, ${cartCount} ${cartCount===1?'item':'items'}`}>
               <CartIcon />
               {badge}

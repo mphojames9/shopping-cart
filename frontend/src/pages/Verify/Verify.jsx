@@ -10,7 +10,7 @@ const Verify = () => {
 
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("orderId");
-  const {url,token,ready,setCartItems,authConfig} = useContext(StoreContext);
+  const {url,token,ready,setCartItems,removeCoupon,authConfig} = useContext(StoreContext);
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -24,6 +24,7 @@ const Verify = () => {
         const response = await axios.post(url+"/api/order/verify",{orderId},authConfig());
         if (response.data.success) {
           setCartItems({});
+          removeCoupon(); // the code was used up by this order
           navigate('/shopping-cart/myorders');
         } else {
           navigate('/shopping-cart/cart');

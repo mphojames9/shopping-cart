@@ -8,7 +8,10 @@ const orderSchema = new mongoose.Schema({
     status:{type:String,default:"Processing"},
     date:{type:Date,default:Date.now},
     payment:{type:Boolean,default:false},
-    stripeSessionId:{type:String}
+    stripeSessionId:{type:String},
+    // promo code used on this order, and the rand amount it took off the products
+    couponCode:{type:String},
+    discount:{type:Number,default:0}
 })
 
 const orderModel = mongoose.models.order || mongoose.model("order",orderSchema);

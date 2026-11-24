@@ -6,6 +6,8 @@ import foodRouter from "./routes/foodRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
+import wishlistRouter from "./routes/wishlistRoutes.js";
+import couponRouter from "./routes/couponRoutes.js";
 import imageModel from "./models/imageModel.js";
 
 // app config
@@ -37,6 +39,8 @@ app.get("/images/:name",async (req,res)=>{
 })
 app.use("/api/user",userRouter)
 app.use("/api/cart",cartRouter)
+app.use("/api/wishlist",wishlistRouter)
+app.use("/api/coupon",couponRouter)
 app.use("/api/order",orderRouter)
 
 app.get("/",(req,res)=>{

@@ -60,6 +60,7 @@
 
 /* ---------- photo ---------- */
 .ps-media{
+    position: relative;
     display: grid;
     place-items: center;
     margin: 10px 0 10px 10px;

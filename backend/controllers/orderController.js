@@ -1,7 +1,9 @@
 import Stripe from "stripe";
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
-import foodModel from "../models/foodModel.js";
+import couponModel from "../models/couponModel.js";
+import { priceItems } from "../utils/pricing.js";
+import { evaluateCoupon } from "../utils/coupons.js";
 
 const DELIVERY_FEE = 40; // keep in sync with frontend/src/context/StoreContext.jsx
 const STATUSES = ["Processing","Out for delivery","Delivered"];
@@ -13,13 +15,14 @@ const frontendUrl = () => (process.env.FRONTEND_URL || "http://localhost:5173/sh
 // customer: create the order and a Stripe Checkout session
 const placeOrder = async (req,res) => {
     let newOrder;
+    let stripeCoupon;
     try {
         const stripe = getStripe();
         if (!stripe) {
             return res.status(503).json({success:false,message:"Payments are not configured yet"})
         }
 
-        const {items,address} = req.body;
+        const {items,address,couponCode} = req.body;
         if (!Array.isArray(items) || items.length === 0) {
             return res.status(400).json({success:false,message:"Your cart is empty"})
         }
@@ -29,19 +32,37 @@ const placeOrder = async (req,res) => {
         const cleanAddress = Object.fromEntries(ADDRESS_FIELDS.map(f => [f,String(address[f]).trim()]));
 
         // prices always come from the database, never from the browser
-        const foods = await foodModel.find({_id:{$in:items.map(i => i.id)}});
-        const lines = [];
-        for (const item of items) {
-            const food = foods.find(f => String(f._id) === String(item.id));
-            const quantity = Number(item.quantity);
-            if (!food || !Number.isInteger(quantity) || quantity < 1) {
-                return res.status(400).json({success:false,message:"One or more items are no longer available"})
-            }
-            lines.push({foodId:String(food._id),name:food.name,price:food.price,quantity});
+        const priced = await priceItems(items);
+        if (priced.error) {
+            return res.status(400).json({success:false,message:priced.error})
         }
-        const amount = lines.reduce((sum,l) => sum + l.price * l.quantity,0) + DELIVERY_FEE;
+        const {lines,subtotalCents} = priced;
 
-        newOrder = await orderModel.create({userId:req.userId,items:lines,amount,address:cleanAddress});
+        // a promo code is checked again here: the cart page only showed what it would do
+        let coupon = null;
+        let discountCents = 0;
+        if (String(couponCode ?? "").trim()) {
+            const result = await evaluateCoupon(couponCode,subtotalCents);
+            if (result.error) {
+                // couponError lets the shop drop the stale code instead of leaving the customer stuck
+                return res.status(400).json({success:false,message:result.error,couponError:true})
+            }
+            coupon = result.coupon;
+            discountCents = result.discountCents;
+        }
+        const amount = (subtotalCents - discountCents + DELIVERY_FEE * 100) / 100;
+
+        newOrder = await orderModel.create({
+            userId:req.userId,items:lines,amount,address:cleanAddress,
+            couponCode:coupon?.code,discount:discountCents / 100
+        });
+
+        // Stripe takes the discount as a one-use coupon on this checkout session
+        if (discountCents > 0) {
+            stripeCoupon = await stripe.coupons.create({
+                amount_off:discountCents,currency:"zar",duration:"once",max_redemptions:1,name:coupon.code
+            });
+        }
 
         const session = await stripe.checkout.sessions.create({
             mode:"payment",
@@ -54,6 +75,7 @@ const placeOrder = async (req,res) => {
                 })),
                 {price_data:{currency:"zar",product_data:{name:"Delivery Fee"},unit_amount:DELIVERY_FEE*100},quantity:1}
             ],
+            ...(stripeCoupon ? {discounts:[{coupon:stripeCoupon.id}]} : {}),
             success_url:`${frontendUrl()}/verify?success=true&orderId=${newOrder._id}`,
             cancel_url:`${frontendUrl()}/verify?success=false&orderId=${newOrder._id}`
         });
@@ -64,6 +86,7 @@ const placeOrder = async (req,res) => {
     } catch (error) {
         console.log(error);
         if (newOrder) await orderModel.findByIdAndDelete(newOrder._id).catch(()=>{});
+        if (stripeCoupon) await getStripe()?.coupons.del(stripeCoupon.id).catch(()=>{});
         res.status(500).json({success:false,message:"Could not start payment"})
     }
 }
@@ -82,8 +105,11 @@ const verifyOrder = async (req,res) => {
         const stripe = getStripe();
         const session = await stripe.checkout.sessions.retrieve(order.stripeSessionId);
         if (session.payment_status === "paid") {
-            order.payment = true;
-            await order.save();
+            // flip unpaid -> paid exactly once, so a promo code is only counted once even if this runs twice
+            const flipped = await orderModel.findOneAndUpdate({_id:order._id,payment:false},{payment:true});
+            if (flipped && order.couponCode) {
+                await couponModel.updateOne({code:order.couponCode},{$inc:{usedCount:1}}).catch(()=>{});
+            }
             await userModel.findByIdAndUpdate(req.userId,{cartData:{}});
             return res.json({success:true,message:"Paid"})
         }

@@ -14,7 +14,7 @@ const Field = ({label, ...props}) => (
 
 const PlaceOder = () => {
 
-  const {getTotalCartAmount, token, food_list, cartItems, url, ready, authConfig} = useContext(StoreContext);
+  const {getTotalCartAmount, getDiscount, coupon, removeCoupon, token, food_list, cartItems, url, ready, authConfig} = useContext(StoreContext);
   const navigate = useNavigate();
 
   const [submitting,setSubmitting] = useState(false);
@@ -44,13 +44,17 @@ const PlaceOder = () => {
 
     setSubmitting(true);
     try {
-      const response = await axios.post(url+"/api/order/place",{address:data,items},authConfig());
+      // only send the code when it is actually taking something off (the server checks it again)
+      const couponCode = getDiscount() > 0 ? coupon.code : undefined;
+      const response = await axios.post(url+"/api/order/place",{address:data,items,couponCode},authConfig());
       if (response.data.success) {
         window.location.replace(response.data.session_url);
       } else {
         alert(response.data.message);
       }
     } catch (error) {
+      // the code stopped working (expired, used up...): drop it so the customer can still check out without it
+      if (error.response?.data?.couponError) removeCoupon();
       alert(error.response?.data?.message || "Could not place your order. Please try again.");
     } finally {
       setSubmitting(false);

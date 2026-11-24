@@ -146,6 +146,7 @@ const Orders = () => {
                   <div className="order-total">
                     <strong>{formatRand(order.amount)}</strong>
                     <span>{itemCount} {itemCount === 1 ? "item" : "items"}</span>
+                    {order.discount > 0 && <span className="order-promo">Promo {order.couponCode} −{formatRand(order.discount)}</span>}
                   </div>
                 </header>
 

@@ -4,6 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import { formatPrice } from '../../utils/format';
 import { CheckIcon, MinusIcon, PlusIcon } from '../Icons';
 import { openProduct } from '../ProductSheet/ProductSheet';
+import WishlistButton from '../WishlistButton/WishlistButton';
 
 const FoodItem = ({id,name,price,description,image,specs}) => {
 
@@ -23,6 +24,7 @@ const FoodItem = ({id,name,price,description,image,specs}) => {
             <img src={url+"/images/"+image} alt="" loading="lazy" />
             {qty>0 && <span className="product-incart"><CheckIcon /> In cart</span>}
         </button>
+        <WishlistButton id={id} name={name} className="heart-card" />
         <div className="product-info">
             <h3>{name}</h3>
             <p className="product-desc">{description}</p>

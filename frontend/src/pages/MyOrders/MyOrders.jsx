@@ -70,7 +70,10 @@ const MyOrders = ({setShowLogin}) => {
                     <span>Order #{String(order._id).slice(-6).toUpperCase()}</span>
                   </div>
                   <p className="order-items">{order.items.map((item)=>`${item.name} × ${item.quantity}`).join(", ")}</p>
-                  <strong className="order-amount">{formatPrice(order.amount)}</strong>
+                  <div className="order-total">
+                    <strong className="order-amount">{formatPrice(order.amount)}</strong>
+                    {order.discount > 0 && <small className="order-promo">{order.couponCode} &minus;{formatPrice(order.discount)}</small>}
+                  </div>
                   <span className={`status status-${statusClass(order.status)}`}>{order.status}</span>
                 </li>
               ))}
